@@ -1,0 +1,15 @@
+.breadcrumb>li {
+    padding: 6px 12px;
+}
+
+.breadcrumb.active {
+	background-color: #CFFFF3;
+}
+
+.progress-bar {
+    min-width: 20px;
+}
+
+.panel.hidden {
+	display: none;
+}
