@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>Tweaklab Raspi Cloner</title>
+
+    <!-- Bootstrap -->
+    <link href="main.css" rel="stylesheet">
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="innerWrapper">
+        <img src="logo.jpg" id="logo">
+        <div class="top">
+          <form id="streamForm" v-class="formClass">
+            <fieldset>
+              <!-- <legend>Stream Info</legend> -->
+              <div class="field">
+                <label for="name">Name</label>
+                <input v-model="name.value" v-class="name.class" required type="text" name="name">
+              </div>
+              <div class="field">
+                <label for="description">Description</label><input v-class="description.class" v-model="description.value" required type="text" name="description">
+              </div>
+              <div class="field">
+                <label for="url">URL</label><input v-class="url.class" v-model="url.value" required type="url" name="url">
+              </div>
+             <div class="field">
+                <label for="genre">Genre</label><input v-class="genre.class" v-model="genre.value" type="text" name="gerne">
+              </div>
+              <!-- <input type="submit" value="STREAM" class="button good">-->
+            </fieldset>
+          </form
+        </div>
+        <div class="bottom">
+          <div class="errorList">
+            <ul>
+              <li v-repeat="items" v-class="class">
+                <i class="icon" v-class="icon"></i>
+                <span v-text="message"></span>
+              </li>
+              <!-- <li class="error"><i class="icon icon-cross_mark"></i>I could not reach switch.ch after {} seconds of trying. Please make sure that I'm connected to the internet</li>
+              <li class="attention"><i class="icon icon-information_white"></i>Wrong IP, may work but please check your settings</li>
+            -->
+            </ul>
+          </div>
+          <p class="buttons">
+            <a class="button good" v-class="class" v-on="click: buttonTrigger">
+              <span v-class="spanClass" v-text="spanText">Loading...</span> {{ title|uppercase }}
+            </a>
+          </p>
+        </div>
+       
+      </div>
+    </div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed
+    <script src="bootstrap.min.js"></script> -->
+    <script src="mustache.js"></script>
+    <script src="vue.js"></script>
+    <script src="superagent.js"></script>
+    <script src="main.js"></script>
+
+  </body>
+</html>
