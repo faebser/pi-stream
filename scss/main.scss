@@ -5,14 +5,6 @@
 @import 'util';
 
 /**
- * Import grid settings :
- * This to be able to use gridle mixins, etc...
- */
-//@import 'grid-settings';
-
-
-
-/**
  * Medias :
  */
 ul#medias {
@@ -53,13 +45,6 @@ html {
 	color: #34495e;
 }
 body {
-	/*@include gridle_state(mobile tablet) {
-		text-align:center;
-	}
-
-	@include gridle_state(ipad-landscape) {
-		font-size:16px;
-	}*/
 }
 
 html,
