@@ -1,0 +1,20 @@
+<fieldset>
+    <legend>General</legend>
+    <p>this section describes general aspects of the live streaming session.</p>
+    <label for="duration">duration</label>
+    <input type="number" name="duration" ng-model="general.duration" value="{{ context.options['duration'] }}" />
+    <label for="bufferSecs">Buffer in Seconds</label>
+    <input type="number" name="bufferSecs" ng-model="general.bufferSecs" value="{{ context.options['bufferSecs'] }}"/>
+    <label for="reconnect">reconnect</label>
+    <select name="reconnect" ng-model="general.reconnect">
+        % for choice in context.options['reconnect'].choices:
+            <option value="{{ choice }}">{{ choice }}</option>
+        % end
+    </select>
+    <label for="realtime">realtime</label>
+    <select name="realtime" ng-model="general.realtime">
+        % for choice in context.options['realtime'].choices:
+            <option value="{{ choice }}">{{ choice }}</option>
+        % end
+    </select>
+</fieldset>

@@ -1,0 +1,46 @@
+% name = "server-" + str(context.index)
+<fieldset id="{{ name }}">
+    <legend>Icecast2 Server</legend>
+    <p>this section describes a streaming connection to an IceCast2 server.</p>
+    <label for="bitrateMode">Bitrate Mode</label>
+    <select name="sampleRate" ng-model="{{ name }}.sampleRate">
+        % for choice in context.options['bitrateMode'].choices:
+            <option value="{{ choice }}">{{ choice }}</option>
+        % end
+    </select>
+    <label for="format">Format</label>
+    <select name="format" ng-model="{{name}}.format">
+        % for choice in context.options['format'].choices:
+            <option value="{{ choice }}">{{ choice }}</option>
+        % end
+    </select>
+    <label for="bitrate">Bitrate</label>
+    <select name="bitrate" ng-model="{{ name }}.bitrate">
+        % for choice in context.options['bitrate'].choices:
+            <option value="{{ choice }}">{{ choice }}</option>
+        % end
+    </select>
+    <label for="quality">Quality</label>
+    <input type="number" name="quality" ng-model="{{name}}.quality" value="{{ context.options['quality'] }}"/>
+    <label for="server">Server</label>
+    <input type="url" name="server" ng-model="{{name}}.server" value="{{ context.options['server'] }}"/>
+    <label for="password">Server</label>
+    <input type="password" name="password" ng-model="{{name}}.password" value="{{ context.options['password'] }}"/>
+    <label for="mountPoint">Server</label>
+    <input type="text" name="mountPoint" ng-model="{{name}}.mountPoint" value="{{ context.options['mountPoint'] }}"/>
+    <label for="name">Server</label>
+    <input type="text" name="name" ng-model="{{name}}.name" value="{{ context.options['name'] }}"/>
+    <label for="description">Server</label>
+    <input type="text" name="description" ng-model="{{name}}.description" value="{{ context.options['description'] }}"/>
+    <label for="url">Server</label>
+    <input type="url" name="url" ng-model="{{name}}.url" value="{{ context.options['url'] }}"/>
+    <label for="gerne">Server</label>
+    <input type="text" name="gerne" ng-model="{{name}}.gerne" value="{{ context.options['gerne'] }}"/>
+
+    <label for="public">public</label>
+    <select name="public" ng-model="{{name}}.public">
+        % for choice in context.options['public'].choices:
+            <option value="{{ choice }}">{{ choice }}</option>
+        % end
+    </select>
+</fieldset>

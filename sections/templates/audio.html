@@ -1,0 +1,24 @@
+<fieldset>
+    <legend>Audio</legend>
+    <p>this section describes the audio input that will be streamed.</p>
+    <label for="device">device</label>
+    <input type="text" name="device" ng-model="audio.device" value="{{ context.options['device'] }}"/>
+    <label for="sampleRate">sample Rate</label>
+    <select name="sampleRate" ng-model="audio.sampleRate">
+        % for choice in context.options['sampleRate'].choices:
+            <option value="{{ choice }}">{{ choice }}</option>
+        % end
+    </select>
+    <label for="bitsPerSample">bits Per Sample</label>
+    <select name="bitsPerSample" ng-model="audio.bitsPerSample">
+        % for choice in context.options['bitsPerSample'].choices:
+            <option value="{{ choice }}">{{ choice }}</option>
+        % end
+    </select>
+    <label for="channel">Channels</label>
+    <select name="channel" ng-model="audio.channel">
+        % for choice in context.options['channel'].choices:
+            <option value="{{ choice }}">{{ choice }}</option>
+        % end
+    </select>
+</fieldset>
