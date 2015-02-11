@@ -1,122 +1,210 @@
-var cloner = (function ($) {
+var piStream = (function ($, Vue, superagent) {
 	// javascript module pattern
 	"use strict"; // enable strict mode for javascript module
 	// private vars
 	var module = {},
-		m = Mustache,
-		buttons = $('button.root'),
-		devs = $('.breadcrumb'),
-		cloner = $('#cloner'),
-		progress = $('.progress-bar'),
-		progressText = $('.progress-text'),
-		breadcrumbs = $('.breadcrumb'),
-		bar = $('#bar'),
-		finish = $('#finish'),
-		timeout = 0,
-		c = {
-			'active': 'active'
+		status = null,
+		errorList = null,
+		bigButton = null,
+		streamForm = null,
+		urls = {
+			'status': '/status',
+			'tests': '/run-tests',
+			'stream': '/stream'
 		};
 	// private methods
-	var clickHandler = function () {
-		buttons.click(function(event) {
-			var e = $(this);
-			var parent = e.parents('ol')
-			devs.removeClass(c.active);
-			parent.addClass(c.active);
-			cloner.removeAttr('disabled');
-		});
-		cloner.click(function(event) {
-			var data = {
-				'master': '',
-				'targets': []
-			};
-			devs.each(function(index, element) {
-				var e = $(element);
-				if(e.hasClass(c.active)) {
-					data['master'] = e.find('li').first().html();
+	var errorMap = function(object) {
+		if(object.status !== 'good') {
+			var icon = 'icon-cross_mark'
+			if(object.status === 'attention') icon = 'icon-information_white';
+			return {
+				'class': object.status,
+				'icon': icon,
+				'message': object.message
+			}
+		}
+	},
+	runStream = function (callback) {
+		// validate form - nope
+		// submit form
+		var isFormValid = true;
+		for (var i in streamForm.$data) {
+			var e = streamForm.$data[i];
+
+			if(e) {
+				if(e.valid() === false) {
+					isFormValid = false;
+					e.class = "invalid";
 				}
 				else {
-					data.targets.push(e.find('li').first().html());
+					e.class = 'valid';
 				}
+			}
+
+		};
+		if(isFormValid) {
+			superagent.post(urls.stream)
+			.set('Content-Type', 'application/json')
+			.send(streamForm.$data)
+			.end(function(response) {
+				console.log(response);
 			});
-			console.log(data);
-			$.ajax({
-			    'type': "POST",
-			    'url': "clone",
-			    'dataType': "json",
-			    'data': data
-			}).done(function(data) {
-				breadcrumbs.fadeOut(400);
-				cloner.fadeOut(400, function() {
-					updateProgressBar(data.progress);
-					bar.fadeIn(700);
-					bar.removeClass('hidden');
-				});
-			});
-		});
-	},
-	updateProgressBar = function (progressData) {
-		var percent = parseInt(progressData.split('%')[0].split('[')[1]);
-		var css = {};
-		if(percent > 0) {
-			css = {
-				'width': percent + '%',
-				'min-width': '20px'
-			};
+
+			window.setTimeout(function() {
+				superagent.get(urls.stream).end(function(response){
+					console.log(response);
+					var status = response.body;
+					if(status.errors == 0) {
+						bigButton.title = 'Darkice is running';
+						streamForm.formClass = 'hidden';
+						console.log(errorList.items);
+						errorList.items.push({
+							'class': 'attention',
+							'icon': 'icon-information_white',
+							'message': 'Streaming-Link: ' + status.link
+						});
+					}
+				})
+			}, 5000)
 		}
 		else {
-			css = {
-				'width': '0%'
-			}
+			bigButton.class = 'bad';
+			bigButton.title = 'Please fix the form';
+			bigButton.action = 'stream';
+			bigButton.spanClass = 'hidden';
+			bigButton.spanText = '';
+			window.setTimeout(function() {
+				updateButton();
+			}, 5000);
 		}
-		progress.css(css);
-		progress.html(percent + '%'),
-		progressText.html(progressData);
-		setTheTimeout();
 	},
-	setTheTimeout = function () {
-		timeout = window.setTimeout(function() {
-			$.ajax({
-				'type': 'GET',
-				'url': 'progress',
-				'dataType': 'json'
-			}).done(function(data) {
-				if(data.progress === 'finish') {
-					window.clearTimeout(timeout);
-					finish.removeClass('hidden');
-					finish.fadeIn(400);
-					bar.fadeOut(400);
-				}
-				else {
-					updateProgressBar(data.progress);
-				}
-			})
-		}, 1000)
-	},
-	testForProgress = function () {
-		$.ajax({
-			'type': 'GET',
-			'url': 'progress',
-			'dataType': 'json'
-		}).done(function(data) {
-			if(data.progress !== 0) {
-				breadcrumbs.fadeOut(400);
-				cloner.fadeOut(400, function() {
-					updateProgressBar(data.progress);
-					bar.fadeIn(700);
-					bar.removeClass('hidden');
-				});
-				setTheTimeout();
-			}
+	runTests = function (callback) {
+		// rerun test
+		// update the list
+		// update buttons
+		superagent.get(urls.tests).end(function(response) {
+			status = response.body;
+			errorList.items = status.map(errorMap).filter(Boolean);
+			updateButton();
+			if(callback) callback();
 		});
+	},
+	updateButton = function () {
+		if (errorList.hasErrors) {
+			bigButton.class = 'bad';
+			bigButton.title = 'rerun tests';
+			bigButton.action = 'tests';
+			bigButton.spanText = '';
+			bigButton.spanClass = 'hidden';
+		}
+		else {
+			bigButton.class = 'good';
+			bigButton.title = 'stream';
+			bigButton.action = 'stream';
+			bigButton.spanClass = 'hidden';
+			bigButton.spanText = '';
+		}
 	};
 	// public methods
 	module.init = function () {
-		clickHandler();
-		testForProgress();
+		superagent.get(urls.status).end(function(response){
+	   		status = response.body;
+
+		   	errorList = new Vue({
+				'el': '.errorList',
+				'data': {
+					'items': status.map(errorMap).filter(Boolean)
+				},
+				'computed': {
+					'hasErrors': function() {
+						for(var i = 0; i < this.items.length; i++) {
+							if(this.items[i].class == 'error') return true;
+						}
+						return false;
+					}
+				}
+			});
+			
+			var errors = errorList.hasErrors;
+			var buttonData = {
+				'class': 'good',
+				'action': 'stream',
+				'spanClass': 'hidden',
+				'spanText': '',
+				'title': 'stream'
+			};
+
+			if(errors) {
+				buttonData.class = 'bad';
+				buttonData.title = 'rerun tests';
+				buttonData.action = 'tests';
+			}
+
+			bigButton = new Vue({
+				'el': '.buttons a',
+				'data': buttonData,
+				'methods': {
+					'buttonTrigger': function(e) {
+						if(this.action === 'stream') {
+							this.title = 'starting darkice'
+							this.spanClass = 'loading';
+							this.spanText = 'starting darkice';
+							runStream();
+						}
+						else if(this.action === 'tests') {
+							this.title = 'running tests'
+							this.spanClass = 'gauge';
+							this.spanText = 'runnig tests'; 
+							runTests();
+						}
+					}
+				}
+			});
+
+			streamForm = new Vue({
+				'el': '#streamForm',
+				'data': {
+					'formClass': '',
+					'name': {
+						'value': '',
+						'valid': function() {
+							if(this.value != '') return true;
+							return false;
+						},
+						'class': ''
+					},
+					'description': {
+						'value': '',
+						'valid': function() {
+							if(this.value != '') return true;
+							return false;
+						},
+						'class': ''
+					},
+					'url': {
+						'value': 'http://nonoradio.tumblr.com',
+						'valid': function() {
+							if(this.value != '') return true;
+							return false;
+						},
+						class: ''
+					},
+					'genre': {
+						'value': '',
+						'valid': function() {
+							return true;
+						},
+						'class': ''
+					},
+				}
+			})
+			console.log(streamForm);
+		});
 	};
 	//return the module
 	return module;
-}(jQuery));
+}(jQuery, Vue, superagent));
 
-$(document).ready(cloner.init());
+$(document).ready(function(){
+	piStream.init();
+})
