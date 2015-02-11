@@ -1,65 +1,96 @@
-# raspberry pi usb-cake replicator
+# raspberry pi as a streamer/recorder
 
-## sponsor
+## Stuff used
 
-This project was made possible by the people at [Tweaklab](http://www.tweaklab.ch).
+* [bottle.py Python Web Framework](http://bottlepy.org/)
+* [Vue.js library for building interactive web interfaces](http://vuejs.org/)
+* [CSS with superpowers (SASS)](http://sass-lang.com/)
+* [Compass CSS Authoring Framework](http://compass-style.org/)
 
-## installation
+## Sponsor
 
-### simple
+(please add sponsor info here)
+
+## Setup
+
+*Note*: We will provide premade raspian disk images in the future.
+Taken from here: https://stmllr.net/blog/live-streaming-mp3-audio-with-darkice-and-icecast2-on-raspberry-pi/
+
+### Preconditions
+
+* Raspberry Pi running Raspbian
+* USB sound stick
+
+### Compiling and installing DarkIce
+
+The default darkice package comes without MP3 support. Since most of the Iceast-Hosting providers use MP3 we need to build Darkice with MP3 support from the sources.
+
+Add a deb-src repository to your sources list at /etc/apt/sources.list:
+
+    $ sudo sh -c "echo 'deb-src http://mirrordirector.raspbian.org/raspbian/ wheezy main contrib non-free rpi' >> /etc/apt/sources.list"
+    $ sudo apt-get update
+    (...some output...)
+
+To fullfill the build dependencies, we have to install some additional packages:
+    
+    $ sudo apt-get --no-install-recommends install build-essential devscripts autotools-dev fakeroot dpkg-dev debhelper autotools-dev dh-make quilt ccache libsamplerate0-dev libpulse-dev libaudio-dev lame libjack-jackd2-dev libasound2-dev libtwolame-dev libfaad-dev libflac-dev libmp4v2-dev libshout3-dev libmp3lame-dev
+
+Create a working directory:
+
+    $ mkdir src && cd src/
+
+Get the source package of darkice:
+
+    $ apt-get source darkice
+    (... some output ...)
+
+Change the compile configuration to match Raspbian environment:
+
+    $ cd darkice-1.0/
+    $ vi debian/rules
+
+    #!/usr/bin/make -f
+    %:
+
+         dh $@
+
+    .PHONY: override_dh_auto_configure
+    override_dh_auto_configure:
+          ln -s /usr/share/misc/config.guess .
+          ln -s /usr/share/misc/config.sub .
+            dh_auto_configure -- --prefix=/usr --sysconfdir=/usr/share/doc/darkice/examples --with-vorbis-prefix=/usr/lib/arm-linux-gnueabihf/ --with-jack-prefix=/usr/lib/arm-linux-gnueabihf/ --with-alsa-prefix=/usr/lib/arm-linux-gnueabihf/ --with-faac-prefix=/usr/lib/arm-linux-gnueabihf/ --with-aacplus-prefix=/usr/lib/arm-linux-gnueabihf/ --with-samplerate-prefix=/usr/lib/arm-linux-gnueabihf/ --with-lame-prefix=/usr/lib/arm-linux-gnueabihf/ CFLAGS='-march=armv6 -mfpu=vfp -mfloat-abi=hard'
+
+Please make sure that that you are using tabs for the indentation. The build will fail with spaces. Download the [rules](https://raw.githubusercontent.com/faebser/pi-stream/master/rules) if you encouter any problems.
+
+Before we start to build the package, change the version of the package to reflect MP3 support. Debchange will ask you to add some comments to the changelog.
+
+    $ debchange -v 1.0-999~mp3+1
+
+    darkice (1.0-999~mp3+1) UNRELEASED; urgency=low
+
+      * New build with mp3 support
+
+     --  <pi@raspberrypi>  Sat, 11 Aug 2012 13:35:06 +0000
+
+Now we are ready to build and install the new Darkice package:
+
+    $ dpkg-buildpackage -rfakeroot -uc -b
+    (... some output ...)
+    $ sudo dpkg -i ../darkice_1.0-999~mp3+1_armhf.deb
+    (... some output ...)
+    Preparing to replace darkice 1.0-999 (using .../darkice_1.0-999~mp3+1_armhf.deb) ...
+    Unpacking replacement darkice ...
+    Setting up darkice (1.0-999~mp3+1) ...
+    (... some output ...)
+
+Tada, now Darkice with MP3 spport should be installed. To test please run:
+    
+    $ darkice
+
+## Running 
 
 * ssh into your raspberry
-* `git clone https://github.com/faebser/raspberry-pi-usb-cloner.git`
-* make sure that cloner.py and usb.sh is executable
-* `python cloner.py` to run the app
+* clone this repository
+* make sure that bottle.py and pistream.py are executable
+* ```python pystream.py``` to start the server
 * navigate your browser to the ip of your raspi, the default port is 8080
-
-### run on startup
-
-* ssh into your raspberry
-* `git clone https://github.com/faebser/raspberry-pi-usb-cloner.git`
-* make sure that cloner.py and usb.sh is executable
-* in the home directory create a file run.sh with the following content 
-```bash
-#!/bin/bash
-
-for pid in $(pidof -x python cloner.py); do
-        if [ $pid != $$ ]; then
-                echo "[$(date)] : Cloner : Process is already running with PID $pid"
-                exit 1
-        fi
-done
-
-echo "starting cloner"
-
-cd /DIR/TO/CLONER
-
-while true
-do
-sh -c "python cloner.py"
-sleep 3
-done
-```
-* edit your .bashrc and add `./run.sh`
-* reboot
-
-### run cloner on port 80
-
-* remove apache with `sudo apt-get install apache2`
-* change the line
-``` python 
-run(host='0.0.0.0', port=8080, reloader=False)
-``` 
-in cloner.py to 
-``` python 
-run(host='0.0.0.0', port=80, reloader=False)
-```
-* follow the instructions above
-
-## usage
-
-* point your browser to the configured ip and port of your raspberry
-* select the source/master
-* press the clone button and clone away
-
-## screenshots
