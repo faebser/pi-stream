@@ -3335,7 +3335,7 @@ class StplParser(object):
     # Match inline statements (may contain python strings)
     _re_inl = '%%(inline_start)s((?:%s|[^\'"\n]+?)*?)%%(inline_end)s' % _re_inl
 
-    default_syntax = '<% %> % {{ }}'
+    default_syntax = '<% %> % [[ ]]'
 
     def __init__(self, source, syntax=None, encoding='utf8'):
         self.source, self.encoding = touni(source, encoding), encoding
@@ -3542,7 +3542,7 @@ ERROR_PAGE_TEMPLATE = """
     <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
     <html>
         <head>
-            <title>Error: {{e.status}}</title>
+            <title>Error: [[e.status]]</title>
             <style type="text/css">
               html {background-color: #eee; font-family: sans-serif;}
               body {background-color: #fff; border: 1px solid #ddd;
@@ -3551,17 +3551,17 @@ ERROR_PAGE_TEMPLATE = """
             </style>
         </head>
         <body>
-            <h1>Error: {{e.status}}</h1>
-            <p>Sorry, the requested URL <tt>{{repr(request.url)}}</tt>
+            <h1>Error: [[e.status]]</h1>
+            <p>Sorry, the requested URL <tt>[[repr(request.url)]]</tt>
                caused an error:</p>
-            <pre>{{e.body}}</pre>
+            <pre>[[e.body]]</pre>
             %%if DEBUG and e.exception:
               <h2>Exception:</h2>
-              <pre>{{repr(e.exception)}}</pre>
+              <pre>[[repr(e.exception)]]</pre>
             %%end
             %%if DEBUG and e.traceback:
               <h2>Traceback:</h2>
-              <pre>{{e.traceback}}</pre>
+              <pre>[[e.traceback]]</pre>
             %%end
         </body>
     </html>
