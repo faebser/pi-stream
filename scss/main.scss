@@ -1,0 +1,253 @@
+/**
+ * Imports :
+ */
+@import 'compass/reset';
+@import 'util';
+
+/**
+ * Import grid settings :
+ * This to be able to use gridle mixins, etc...
+ */
+//@import 'grid-settings';
+
+
+
+/**
+ * Medias :
+ */
+ul#medias {
+	background:black;
+	text-align:center;
+	margin-bottom:30px;
+
+	li {
+		display:inline-block;
+		height:50px;
+		line-height:50px;
+		padding:0 30px;
+		color:white;
+		font-size:16px;
+		cursor:pointer;
+		margin:0;
+
+		&.active,
+		&:hover {
+			background:white;
+			color:black;
+		}
+	}
+}
+
+/**
+ * font
+ */
+
+@include font-block('source sans pro', 'sourcesanspro-regular-webfont');
+@include font-block('source sans pro bold', 'sourcesanspro-bold-webfont');
+
+/**
+ * Basic formatting :
+ */
+html {
+	-webkit-font-smoothing: antialiased;
+	color: #34495e;
+}
+body {
+	/*@include gridle_state(mobile tablet) {
+		text-align:center;
+	}
+
+	@include gridle_state(ipad-landscape) {
+		font-size:16px;
+	}*/
+}
+
+html,
+body,
+.wrapper {
+	width: 100%;
+	height: 100%;
+}
+
+
+@import 'icons';
+
+$top-color: #3FA45E;
+$bottom-color: #42b983;
+$border-color: #1A4A40;
+
+$good-normal: #3FA45E;
+$good-dark: #1A4A40;
+
+$bad-normal: #D23232;
+$bad-dark: #951829;
+
+$font-normal: #34495e;
+$font-light: #507090;
+
+$form-boxes: #889199;
+$form-background: #E7ECF1;
+
+/* apply a natural box layout model to all elements */
+* { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; }
+
+@import "compass/css3/box-shadow";
+@import "compass/css3/border-radius";
+
+@import 'spinners';
+
+.button {
+	font-family: 'source sans pro bold';
+	cursor: pointer;
+	letter-spacing: 0.8px;
+	word-spacing: 1.4px;
+	font-size: 25px;
+	display: inline-block;
+	padding: 0.5em 1.2em;
+	color: rgb(240, 240, 240);
+	transition: all 0.5s ease;
+	margin-bottom: 6px;
+	margin-top: 2em;
+	&.good {
+		background-color: $good-normal;
+		@include border-radius(6px);
+		@include box-shadow(0px 6px 0px $good-dark);
+	}
+
+	&.bad {
+		background-color: $bad-normal;
+		@include border-radius(6px);
+		@include box-shadow(0px 6px 0px $bad-dark);
+	}
+}
+
+input.button {
+	border: none;
+}
+
+.errorList {
+	margin: 0.5em auto;
+	h1 {
+		font-family: 'source sans pro bold';
+	}
+	ul {
+		// border: 1px solid $bad-dark;
+		// @include border-radius(3px);
+		margin: 0.5em auto;
+		li {
+			margin: 0.25em auto;
+			padding: 0.5em 0.75em;
+			text-align: left;
+			font-family: 'source sans pro bold';
+			@extend %center-parent;
+			&:first-child {
+				margin-top: 0;
+			}
+			&:last-child {
+				margin-bottom: 0;
+			}
+			.icon,
+			i {
+				font-size: 1.4em;
+				vertical-align: middle;
+				margin-right: 1em;
+				float: left;
+			}
+			&.error {
+				border: 4px solid $bad-normal;
+				@include border-radius(6px);
+				.glyphicon {
+					font-size: 1.4em;
+					color: #D23232;
+					vertical-align: middle;
+					margin-right: 1em;
+				}
+				.icon {
+					color: $bad-normal;
+				}
+			}
+			&.attention {
+				border: 4px solid #EFC82B;
+				@include border-radius(6px);
+				.icon {
+					color: #EFC82B;
+				}
+			}
+		}
+	}
+}
+
+.wrapper {
+	@extend %center-parent;
+	font-family: 'source sans pro';
+	.innerWrapper {
+		@include inline-block;
+		max-width: 500px;
+		.top {
+			form {
+				margin-top: 3.125em;
+				fieldset {
+					.field {
+						position: relative;
+						label {
+							position: absolute;
+							right: 0.25em;
+							top: 0;
+							color: $font-light;
+						}
+						input,
+						label {
+							font-size: 0.9em;
+							padding: 0.5em 0.25em;
+							//margin: 0.5em auto;
+							display: block;
+							font-family: 'source sans pro';
+						}
+						input {
+							margin: 0.5em auto;
+							width: 100%;
+							border: 2px solid $form-boxes;
+							@include border-radius(3px);
+							color: $font-normal;
+							background-color: white;
+							&:active,
+							&:focus {
+								//box-shadow: 0px 0px 2px #34495e;
+								outline: none;
+								&:valid,
+								&.valid {
+									//box-shadow: 0px 0px 3px $good-normal;
+									border: 2px solid $good-normal;
+								}
+								&:invalid,
+								&.invalid {
+									//box-shadow: 0px 0px 3px $bad-normal;
+									border: 2px solid $bad-normal;
+								}
+							}
+							&.valid {
+								//box-shadow: 0px 0px 3px $good-normal;
+								border: 2px solid $good-normal;
+							}
+							&.invalid {
+								//box-shadow: 0px 0px 3px $bad-normal;
+								border: 2px solid $bad-normal;
+							}
+						}
+					}
+					legend {
+						font-family: 'source sans pro bold';
+					}
+				}
+			}
+		}
+		.buttons {
+			display: block;
+			//padding: 0.5em;
+			
+			.gauge {
+				margin-right: 1em;
+			}
+		}
+	}
+}

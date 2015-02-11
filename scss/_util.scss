@@ -1,0 +1,101 @@
+// @author: fabian.frei@esf-frei.ch
+// some scss utils
+
+// verctial and horizontal center
+@import "compass/css3/inline-block";
+
+%center-parent {
+	text-align: center;
+	&:before {
+		content: ' ';
+		@include inline-block;
+		height: 100%;
+		vertical-align: middle;
+		font-size: 0;
+		//margin-right: -0.25em; /* Adjusts for spacing */
+	}
+}
+
+%center-child {
+	@include inline-block(middle);
+}
+
+// font-squirrel @font-face mixin
+
+@mixin font-block($font-family, $path) {
+	@font-face {
+	    font-family: $font-family;
+	    src: url('#{$path}.eot');
+	    src: url('#{$path}.eot?#iefix') format('embedded-opentype'),
+	    	 url('#{$path}.woff2') format('woff'),
+	         url('#{$path}.woff') format('woff'),
+	         url('#{$path}.ttf') format('truetype'),
+	         url('#{$path}.svg#pt_sansregular') format('svg');
+	    font-weight: normal;
+	    font-style: normal;
+	}
+}
+
+// calculate html-base font-size in em
+@mixin baseFontSizeAndLineHeightInEm($target, $base, $line-height) {
+	font-size: ($target / $base ) * 1em;
+	line-height: ($line-height / $target);
+}
+
+$footerHeight: 10px;
+$main-padding: 10px;
+
+// sticky footer
+%footer-parent {
+	min-height: 100%;
+    margin-bottom: -($footerHeight + $main-padding);
+    &:after {
+        content: "";
+        display: block;
+        height: $footerHeight + $main-padding;
+    }
+}
+
+%footer-target {
+	height: $footerHeight + $main-padding;
+}
+
+// clearfix
+.clearfix {
+	&:before,
+	&:after {
+	    content: " "; /* 1 */
+	    display: table; /* 2 */
+	}
+
+	&:after {
+	    clear: both;
+	}
+}
+
+// ----
+// Sass (v3.3.0.rc.2)
+// Compass (v1.0.0.alpha.17)
+// ----
+
+//
+// map-fetch($map, $keys)
+//
+// An easy way to fetch a deep value in a multi-level map. Works much like
+// map-get() except that you pass multiple keys as the second parameter to
+// go down multiple levels in the nested map.
+//
+@function map-fetch($map, $keys) {
+  $key: nth($keys, 1);
+  $length: length($keys);
+  $value: map-get($map, $key);
+  @if ($length > 1) {
+    $rest: ();
+    @for $i from 2 through $length {
+      $rest: append($rest, nth($keys, $i))
+    }
+    @return map-fetch($value, $rest)
+  } @else {
+    @return $value;
+  }
+}

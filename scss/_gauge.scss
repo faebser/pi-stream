@@ -1,0 +1,206 @@
+@import "compass/css3/animation";
+@import "compass/css3/transform";
+
+@include keyframes(gauge) {
+  0% {
+    -webkit-transform: rotate(-50deg);
+    -moz-transform: rotate(-50deg);
+    -ms-transform: rotate(-50deg);
+    -o-transform: rotate(-50deg);
+    transform: rotate(-50deg);
+  }
+
+  10% {
+    -webkit-transform: rotate(20deg);
+    -moz-transform: rotate(20deg);
+    -ms-transform: rotate(20deg);
+    -o-transform: rotate(20deg);
+    transform: rotate(20deg);
+  }
+
+  20% {
+    -webkit-transform: rotate(60deg);
+    -moz-transform: rotate(60deg);
+    -ms-transform: rotate(60deg);
+    -o-transform: rotate(60deg);
+    transform: rotate(60deg);
+  }
+
+  24% {
+    -webkit-transform: rotate(60deg);
+    -moz-transform: rotate(60deg);
+    -ms-transform: rotate(60deg);
+    -o-transform: rotate(60deg);
+    transform: rotate(60deg);
+  }
+
+  40% {
+    -webkit-transform: rotate(-20deg);
+    -moz-transform: rotate(-20deg);
+    -ms-transform: rotate(-20deg);
+    -o-transform: rotate(-20deg);
+    transform: rotate(-20deg);
+  }
+
+  54% {
+    -webkit-transform: rotate(70deg);
+    -moz-transform: rotate(70deg);
+    -ms-transform: rotate(70deg);
+    -o-transform: rotate(70deg);
+    transform: rotate(70deg);
+  }
+
+  56% {
+    -webkit-transform: rotate(78deg);
+    -moz-transform: rotate(78deg);
+    -ms-transform: rotate(78deg);
+    -o-transform: rotate(78deg);
+    transform: rotate(78deg);
+  }
+
+  58% {
+    -webkit-transform: rotate(73deg);
+    -moz-transform: rotate(73deg);
+    -ms-transform: rotate(73deg);
+    -o-transform: rotate(73deg);
+    transform: rotate(73deg);
+  }
+
+  60% {
+    -webkit-transform: rotate(75deg);
+    -moz-transform: rotate(75deg);
+    -ms-transform: rotate(75deg);
+    -o-transform: rotate(75deg);
+    transform: rotate(75deg);
+  }
+
+  62% {
+    -webkit-transform: rotate(70deg);
+    -moz-transform: rotate(70deg);
+    -ms-transform: rotate(70deg);
+    -o-transform: rotate(70deg);
+    transform: rotate(70deg);
+  }
+
+  70% {
+    -webkit-transform: rotate(-20deg);
+    -moz-transform: rotate(-20deg);
+    -ms-transform: rotate(-20deg);
+    -o-transform: rotate(-20deg);
+    transform: rotate(-20deg);
+  }
+
+  80% {
+    -webkit-transform: rotate(20deg);
+    -moz-transform: rotate(20deg);
+    -ms-transform: rotate(20deg);
+    -o-transform: rotate(20deg);
+    transform: rotate(20deg);
+  }
+
+  83% {
+    -webkit-transform: rotate(25deg);
+    -moz-transform: rotate(25deg);
+    -ms-transform: rotate(25deg);
+    -o-transform: rotate(25deg);
+    transform: rotate(25deg);
+  }
+
+  86% {
+    -webkit-transform: rotate(20deg);
+    -moz-transform: rotate(20deg);
+    -ms-transform: rotate(20deg);
+    -o-transform: rotate(20deg);
+    transform: rotate(20deg);
+  }
+
+  89% {
+    -webkit-transform: rotate(25deg);
+    -moz-transform: rotate(25deg);
+    -ms-transform: rotate(25deg);
+    -o-transform: rotate(25deg);
+    transform: rotate(25deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(-50deg);
+    -moz-transform: rotate(-50deg);
+    -ms-transform: rotate(-50deg);
+    -o-transform: rotate(-50deg);
+    transform: rotate(-50deg);
+  }
+}
+
+
+
+/* Styles for old versions of IE */
+.gauge {
+  font-family: sans-serif;
+  font-weight: 100;
+}
+
+$border-radius: 25px; 
+/* :not(:required) hides this rule from IE9 and below */
+.gauge:not(:required) {
+  background: white;
+  top: 5px;
+  -moz-border-radius-topleft: $border-radius;
+  -webkit-border-top-left-radius: $border-radius;
+  border-top-left-radius: $border-radius;
+  -moz-border-radius-topright: $border-radius;
+  -webkit-border-top-right-radius: $border-radius;
+  border-top-right-radius: $border-radius;
+  display: inline-block;
+  width: $border-radius*2;
+  height: $border-radius;
+  overflow: hidden;
+  position: relative;
+  text-indent: -9999px;
+  //@for $i from 0 through 100 {
+    //$rotate: $i * 1.8 - 90;
+    //&.percent-#{$i}::before {
+      //@include transform(rotate(#{$rotate}deg));
+    //}
+  //}
+
+}
+.gauge:not(:required)::before {
+  -webkit-animation: gauge 4000ms infinite ease;
+  -moz-animation: gauge 4000ms infinite ease;
+  -ms-animation: gauge 4000ms infinite ease;
+  -o-animation: gauge 4000ms infinite ease;
+  animation: gauge 4000ms infinite ease;
+  background: $bad-normal;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  -ms-border-radius: 2px;
+  -o-border-radius: 2px;
+  border-radius: 2px;
+  content: '';
+  position: absolute;
+  left: (25px-2px);
+  top: 5.33333px;
+  width: 4px;
+  height: 20px;
+  -webkit-transform-origin: 50% 100%;
+  -moz-transform-origin: 50% 100%;
+  -ms-transform-origin: 50% 100%;
+  -o-transform-origin: 50% 100%;
+  transform-origin: 50% 100%;
+  transition: all 5000ms ease;
+
+}
+.gauge:not(:required)::after {
+  content: '';
+  background: $bad-normal;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+  border-radius: 8px;
+  position: absolute;
+  left: $border-radius/2+6.4px;
+  top: $border-radius/2+6.4px;
+  width: 12.8px;
+  height: 12.8px;
+}

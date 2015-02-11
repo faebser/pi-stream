@@ -1,0 +1,76 @@
+/**
+ * Imports :
+ */
+//@import 'compass/reset';
+
+/**
+ * Import grid settings :
+ * This to be able to use gridle mixins, etc...
+ */
+@import 'grid-settings';
+
+/**
+ * Medias :
+ */
+ul#medias {
+	background:black;
+	text-align:center;
+	margin-bottom:30px;
+
+	li {
+		display:inline-block;
+		height:50px;
+		line-height:50px;
+		padding:0 30px;
+		color:white;
+		font-size:16px;
+		cursor:pointer;
+		margin:0;
+
+		&.active,
+		&:hover {
+			background:white;
+			color:black;
+		}
+	}
+
+	@include gridle_state((
+		max-width : 620px
+	)) {
+		display:none;
+	}
+}
+
+/**
+ * Basic formatting :
+ */
+html {
+	font:11px/1.5 'Helvetica Neue', Verdana, sans-serif;
+}
+body {
+	@include gridle_state(mobile tablet) {
+		text-align:center;
+	}
+
+	@include gridle_state(ipad-landscape) {
+		font-size:16px;
+	}
+}
+
+
+/**
+ * Gridle set sample :
+ */
+#myCoolItem {
+	@include gridle_set((
+		grid : 8,
+		push : 2,
+		tablet : (
+			grid : 12,
+			push : 0
+		),
+		mobile : (
+			visible : false
+		)
+	));
+}
