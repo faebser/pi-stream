@@ -20,7 +20,7 @@
               <!-- <legend>Stream Info</legend> -->
               <div class="field">
                 <label for="name">Name</label>
-                <input v-model="name.value" v-class="name.class" required type="text" name="name">
+                <input id="name" v-model="name.value" v-class="name.class" required type="text" name="name">
               </div>
               <div class="field">
                 <label for="description">Description</label><input v-class="description.class" v-model="description.value" required type="text" name="description">
@@ -33,7 +33,7 @@
               </div>
               <!-- <input type="submit" value="STREAM" class="button good">-->
             </fieldset>
-          </form
+          </form>
         </div>
         <div class="bottom">
           <div class="errorList">
