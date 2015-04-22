@@ -1,8 +1,7 @@
 __author__ = 'faebser'
 
 from enum import Enum
-
-
+import bottle
 
 
 class TestStatus(Enum):
@@ -38,12 +37,18 @@ add_test(u'ip_private', IpPrivateTest())
 from usb_audio import UsbAudioTest
 add_test(u'usb_audio', UsbAudioTest())
 
+from test_test import TestTest
+add_test(u'test', TestTest())
+
 
 def run_all_tests():
     status = dict()
     for name, test in test_manager.iteritems():
         result, message = test.run_test()
         status.update({
-            result: message
+            test.name: {
+                "result": result,
+                "message": message
+            }
         })
     return status
