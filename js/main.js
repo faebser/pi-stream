@@ -42,13 +42,15 @@ var piStream = (function ($, Vue, superagent) {
 			}
 
 		};
+
 		if(isFormValid) {
 			superagent.post(urls.stream)
-			.set('Content-Type', 'application/json')
-			.send(streamForm.$data)
-			.end(function(response) {
-				console.log(response);
-			});
+				.set('Content-Type', 'application/json')
+				.send(streamForm.$data)
+				.end(function(error, response) {
+					console.log(error);
+					console.log(response);
+				});
 
 			window.setTimeout(function() {
 				superagent.get(urls.stream).end(function(response){
