@@ -39,61 +39,6 @@ def fonts(filename):
 def images(filename):
     return static_file(filename, root='img')
 
-"""
-def buildCommandString(master, targets):
-    target = 'of=/dev/%s ' * len(targets)
-    print(target % tuple(targets))
-    command = "sudo dcfldd bs=4M if=/dev/" + master + " " + target % tuple(targets) + "sizeprobe=if statusinterval=1 2>&1 | tee progress.info"
-    print(command)
-    return command
-
-@post('/clone')
-def clone():
-    subprocess.Popen('cat /dev/null > progress.info', shell=True)
-    master = request.params.master
-    targets = request.params.getall('targets[]')
-    with open("progress.info", 'w+') as f:
-        subprocess.Popen(buildCommandString(master, targets), stdout=f, shell=True)
-    time.sleep(1)
-    return progress()
-
-
-@get('/progress')
-def progress():
-    status = subprocess.Popen('tail -n 1 progress.info', shell=True, stdout=subprocess.PIPE)
-    output, error = status.communicate()
-    if len(output) == 0:
-        return {'progress': 0}
-    if "records out" in output:
-        subprocess.Popen('cat /dev/null > progress.info', shell=True)
-        return {'progress': 'finish'}
-    return {'progress': output.splitlines()[-1]}
-
-
-@route('/')
-@view('index.html')
-def index():
-    context = {}
-    # see http://unix.stackexchange.com/questions/60299/how-to-determine-which-sd-is-usb
-    usbDevices = subprocess.Popen('bash usb.sh', stderr=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
-    output, errors = usbDevices.communicate()
-    if len(output) == 0:  # no devices
-        context.update({
-            'noDevices': True
-        })
-        return dict(context=context)
-    else:  # we have devices
-        devices = []
-        for device in output.splitlines():
-            name, info = device.split(b';')
-            devices.append({'name': name, 'info': info})
-        context.update({
-            'devices': devices,
-            'noDevices': False
-        })
-        return dict(context=context)
-"""
-
 # testing
 # real stuff down here
 # by now the config and all the sections should be imported
@@ -112,6 +57,7 @@ def init():
     global status
     status.clear()
     status = run_all_tests()
+    print(status)
 
 
 @get('/run-tests')
@@ -125,7 +71,7 @@ def run_all_tests_http():
 @get('/status')
 def get_status():
     global status
-    json_list = [{'message': message, 'status': result.name.lower()} for result, message in status.iteritems()]
+    json_list = [{'message': status['message'], 'status': status['result'].name.lower()} for name, status in status.iteritems()]
     response.content_type = json_content_type
     return json.dumps(json_list)
 
@@ -154,10 +100,16 @@ def start_stream():
     config.icecast[0].url.value = unicode(values['url']['value'])
     config.icecast[0].description.value = unicode(values['description']['value'])
 
-    with codecs.open('test.cfg', mode='wb', encoding='utf-8') as config_file:
-        config.write_to_file(config_file)
-        filename = config_file.name
-    print filename
+    try:
+        with codecs.open('test.cfg', mode='wb', encoding='utf-8') as config_file:
+            config.write_to_file(config_file)
+            filename = config_file.name
+            print filename
+    except IOError as e:
+        print("there is an error")
+        print("stuff")
+        return {'error': 'File not availabe'}
+
     darkice = subprocess.Popen('sudo darkice -c {}'.format(filename), stderr=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
 
     # non blocking reading of stdout and stderr for darkice status
@@ -262,6 +214,5 @@ def get(section, option):
         raise HTTPError(500, json.dumps({'error': u'section ' + str(section) + u" or option " + str(option) + " not available"}))
 
 TEMPLATE_PATH.append('./sections/templates')
-debug(True)
 init()
-run(host='0.0.0.0', port=8080, reloader=True)
+run(host='0.0.0.0', port=8080, reloader=True, debug=True)
