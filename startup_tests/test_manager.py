@@ -31,24 +31,22 @@ add_test(u'ping_stream', PingStreamServerTest())
 from disk_space import DiskSpaceTest
 add_test(u'disk_space', DiskSpaceTest())
 
-from ip_adress import IpPrivateTest
+from ip_address import IpPrivateTest
 add_test(u'ip_private', IpPrivateTest())
 
 from usb_audio import UsbAudioTest
 add_test(u'usb_audio', UsbAudioTest())
 
-from test_test import TestTest
-add_test(u'test', TestTest())
+#from test_test import TestTest
+#add_test(u'test', TestTest())
 
 
 def run_all_tests():
-    status = dict()
+    status = list()
     for name, test in test_manager.iteritems():
         result, message = test.run_test()
-        status.update({
-            test.name: {
-                "result": result,
-                "message": message
-            }
+        status.append({
+            "result": result,
+            "message": message
         })
-    return status
+    return sorted(status, key=lambda item: item['result'].value)

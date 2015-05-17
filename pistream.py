@@ -2,7 +2,7 @@
 __author__ = 'faebser'
 
 from bottle import route, run, template, view, static_file, get, post, request, HTTPError, debug, TEMPLATE_PATH, response
-import os
+from os import linesep
 import subprocess
 import time
 import json
@@ -12,7 +12,7 @@ from sections.section_manager import get_dicts
 import sections
 from sections.section_manager import manager as sections
 from sections.section_manager import get_all_sections
-from startup_tests.test_manager import add_test, run_all_tests
+from startup_tests.test_manager import add_test, run_all_tests, TestStatus
 import codecs
 import select
 from threading import Thread
@@ -63,7 +63,6 @@ def init():
 @get('/run-tests')
 def run_all_tests_http():
     global status
-    status.clear()
     status = run_all_tests()
     return get_status()
 
@@ -71,7 +70,7 @@ def run_all_tests_http():
 @get('/status')
 def get_status():
     global status
-    json_list = [{'message': status['message'], 'status': status['result'].name.lower()} for name, status in status.iteritems()]
+    json_list = [{'message': item['message'], 'status': item['result'].name.lower()} for item in status]
     response.content_type = json_content_type
     return json.dumps(json_list)
 
@@ -125,6 +124,9 @@ def start_stream():
 
 @get('/stream')
 def get_stream_status():
+    global darkice_stderr_queue
+    global darkice_stdout_queue
+
     lines = ''
     try:
         while not darkice_stdout_queue.empty():
@@ -142,7 +144,35 @@ def get_stream_status():
         print('no error yet')
     else:
         print errors
-    return {'link': 'http://panel9.serverhostingcenter.com:2199/tunein/yfgmkhow-stream.pls', 'errors': len(errors)}
+    #print "lines:"
+    #print ""
+    #print lines
+    #print "erereresosorsr:"
+    #print ""
+    #print errors
+    #print type(errors)
+    errors_from_lines = filter(None, [parse_lines_for_error(line) for line in lines.split(linesep)])
+    print(errors_from_lines)
+    error_messages = filter(None, [parse_errors(error) for error in errors.split(linesep)])
+    error_messages.extend(errors_from_lines)
+    print(error_messages)
+    return {'link': 'http://panel9.serverhostingcenter.com:2199/tunein/yfgmkhow-stream.pls', 'errors': len(error_messages), 'messages': error_messages}
+
+
+def parse_lines_for_error(line):
+    if 'DarkIce:' in line and 'cpp' in line:
+        return {
+            'message': line,
+            'status': TestStatus.Error.name.lower()
+        }
+
+
+def parse_errors(error):
+    if len(error) != 0:
+        return {
+            'message': error,
+            'status': TestStatus.Error.name.lower()
+        }
 
 
 @get('/')

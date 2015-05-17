@@ -36,8 +36,8 @@ class PingSwitchTest(TestClass):
 
     def run_test(self):
         test = real_ping('switch.ch', self.timeout)
-        if 'socket' in test:
-            return TestStatus.Error, u"I could not use the python socket to connect to the internet. Error: {}".format(test)
+        if 'socket' in test or 'Socket' in test:
+            return TestStatus.Error, u"I could not reach switch.ch. {}".format(test)
         elif 'timeout' in test:
             return TestStatus.Error, u"I could not reach switch.ch after {} seconds of trying. Please make sure that I'm connected to the internet".format(self.timeout)
         else:
@@ -55,9 +55,9 @@ class PingStreamServerTest(TestClass):
     def run_test(self):
         if self.ip is not None:
             test = real_ping(self.ip, self.timeout)
-            if 'socket' in test:
-                return TestStatus.Error, u"I could not use the python socket to connect to the internet. Error: {}".format(test)
+            if 'socket' in test or 'Socket' in test:
+                return TestStatus.Error, u"I could not reach the streaming server. Error: {}".format(test)
             elif 'timeout' in test:
-                return TestStatus.Error, u"I could not reach switch.ch after {} seconds of trying. Please make sure that I'm connected to the internet".format(self.timeout)
+                return TestStatus.Error, u"I could not reach streaming server after {} seconds of trying. Please make sure that I'm connected to the internet".format(self.timeout)
             else:
                 return TestStatus.Good, 'I pinged {}'.format(self.ip)

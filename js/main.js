@@ -14,7 +14,7 @@ var piStream = (function ($, Vue, superagent) {
 		};
 	// private methods
 	var errorMap = function(object) {
-		if(object.status !== 'good') {
+		if(object && object.status && object.status !== 'good') {
 			var icon = 'icon-cross_mark'
 			if(object.status === 'attention') icon = 'icon-information_white';
 			return {
@@ -59,12 +59,14 @@ var piStream = (function ($, Vue, superagent) {
 					if(status.errors == 0) {
 						bigButton.title = 'Darkice is running';
 						streamForm.formClass = 'hidden';
-						console.log(errorList.items);
 						errorList.items.push({
 							'class': 'attention',
 							'icon': 'icon-information_white',
 							'message': 'Streaming-Link: ' + status.link
 						});
+					}
+					else {
+						errorList.items = response.body.messages.map(errorMap).filter(Boolean);
 					}
 				})
 			}, 5000)
@@ -126,8 +128,10 @@ var piStream = (function ($, Vue, superagent) {
 					}
 				}
 			});
-			
+
+			console.log(errorList.items);
 			var errors = errorList.hasErrors;
+
 			var buttonData = {
 				'class': 'good',
 				'action': 'stream',

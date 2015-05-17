@@ -14,4 +14,4 @@ class IpPrivateTest(TestClass):
         if '192.168' in ip:
             return TestStatus.Good, 'My IP-Address in private range: {})'.format(ip)
         else:
-            return TestStatus.Attention, 'My IP-Address should start with 192.168. but it looks like this {}'.format(ip)
+            return TestStatus.Attention, 'My IP-Address should start with 192.168. But it is {}'.format(ip)
