@@ -3,6 +3,7 @@ __author__ = 'faebser'
 import configparser
 from configparser import NoOptionError, NoSectionError, ConfigParser
 import tempfile
+from startup_tests.test_manager import TestStatus
 import json
 import subprocess
 
@@ -62,8 +63,6 @@ class DarkiceConfigWrapper(object):
         self.config_file = config_file
         self.parser.read_file(self.config_file)
         self.general = General(self.parser)
-
-
 
 
 
@@ -176,23 +175,6 @@ class Icecast2(object):
 
     section_name = 'icecast2-'
 
-    """
-    bitrateMode = property(_bitrateMode.getvalue, _bitrateMode.setvalue, _bitrateMode.delvalue, u'average bit rate')
-    format = property(_format.getvalue, _format.setvalue, _format.delvalue, u'format of the stream: ogg vorbis, mp3')
-    bitrate = property(_bitrate.getvalue, _bitrate.setvalue, _bitrate.delvalue, u'bitrate of the stream sent to the server')
-    quality = property(_quality.getvalue, _quality.setvalue, _quality.delvalue, u'no comment provided')
-    server = property(_server.getvalue, _server.setvalue, _server.delvalue, u'host name or ip of the server')
-    port = property(_port.getvalue, _port.setvalue, _port.delvalue, u'port of the IceCast2 server, usually 8000')
-    password = property(_password.getvalue, _password.setvalue, _password.delvalue, u'source password to the IceCast2 server')
-    mountPoint = property(_mountPoint.getvalue, _mountPoint.setvalue, _mountPoint.delvalue, u'mount point of this stream on the IceCast2 server')
-    name = property(_name.getvalue, _name.setvalue, _name.delvalue, u'name of the stream')
-    description = property(_description.getvalue, _description.setvalue, _description.delvalue, u'description of the stream')
-    url = property(_url.getvalue, _url.setvalue, _url.delvalue, u'URL related to the stream')
-    genre = property(_genre.getvalue, _genre.setvalue, _genre.delvalue, u'genre of the stream')
-    public = property(_public.getvalue, _public.setvalue, _public.delvalue, u'advertise this stream?')
-    localDumpFile = property(_localDumpFile.getvalue, _localDumpFile.setvalue, _localDumpFile.delvalue, u'local dump file')
-    """
-
     def __init__(self, _section):
         for prop in self.property_tuple:
             try:
@@ -210,6 +192,7 @@ def add_value_from_prop(_parser, prop, section_name):
         _parser.set(section_name, prop.name, unicode(prop.value))
 
 
+"""
 def write_to_temp_file():
     fp = tempfile.TemporaryFile()
     tempParser = configparser.ConfigParser()
@@ -220,50 +203,52 @@ def write_to_temp_file():
         add_value_from_prop(tempParser, prop, audio.section_name)
     for index, server in enumerate(icecast):
         for prop in server.property_tuple:
-            print str(index)
             add_value_from_prop(tempParser, prop, server.section_name + str(index))
     return fp
+"""
 
 
-def write_to_file(fp):
+def write_to_file(fp, general_section, input_section, servers):
     temp_parser = configparser.ConfigParser()
     temp_parser.optionxform = str
-    #temp_parser.read_file(fp)
-    for prop in general.property_tuple:
-        add_value_from_prop(temp_parser, prop, general.section_name)
-    for prop in audio.property_tuple:
-        add_value_from_prop(temp_parser, prop, audio.section_name)
-    for index, server in enumerate(icecast):
+    for prop in general_section.property_tuple:
+        add_value_from_prop(temp_parser, prop, general_section.section_name)
+    for prop in input_section.property_tuple:
+        add_value_from_prop(temp_parser, prop, input_section.section_name)
+    for index, server in enumerate(servers):
         for prop in server.property_tuple:
             add_value_from_prop(temp_parser, prop, server.section_name)
     temp_parser.write(fp)
     return fp
 
-def run_darkice(configFile):
 
-    pass
+def init_config(config_file):
+    parser = configparser.ConfigParser()
+    icecast = list()
+    general = None
+    audio = None  # renamed to audio instead of input as it would shadow builtin input
+    errors = []
 
-parser = configparser.ConfigParser()
-icecast = list()
-general = None
-audio = None  # renamed to audio instead of input as it would shadow builtin input
+    parser.read_file(config_file)
 
-parser.read_file(open('darkice.cfg'))
-try:
-    general = General(parser['general'])
-    audio = Input(parser['input'])
-except NoSectionError as error:
-    print "Section {0} not found. This sections contains info need for darkice. please check your config-file".format(error.section)
-
-for i in range(0, 7):
     try:
-        name = 'icecast2-' + str(i)
-        print str(i)
-        tempServer = Icecast2(parser[name])
-        tempServer.section_name = name
-        icecast.append(tempServer)
+        general = General(parser['general'])
+        audio = Input(parser['input'])
     except KeyError as error:
-        if len(icecast) is 0:
-            print "Section {0} not found. At least one server section is needed. Please check your config-file".format(error.section)
-        else:
-            break
+        print "Section {0} not found. This sections contains info needed for darkice. please check your config-file".format(error)
+        errors.append((TestStatus.Error,
+                      "Section {0} not found. This sections contains info need for darkice. please check your config-file".format(error)))
+
+    for i in range(0, 7):
+        try:
+            name = 'icecast2-' + str(i)
+            tempServer = Icecast2(parser[name])
+            tempServer.section_name = name
+            icecast.append(tempServer)
+        except KeyError as error:
+            if len(icecast) == 0:
+                print "Section {0} not found. At least one server section is needed. Please add a server to your config file".format(error)
+                errors.append((TestStatus.Error,
+                           "Section {0} not found. At least one server section is needed. Please add a server to your config file".format(error)))
+
+    return {"audio": audio, "general": general, "servers": icecast}, errors

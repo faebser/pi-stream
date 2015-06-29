@@ -7,12 +7,10 @@ import subprocess
 import time
 import json
 import config
-from config import section_to_dict as to_json
-from sections.section_manager import get_dicts
-import sections
-from sections.section_manager import manager as sections
-from sections.section_manager import get_all_sections
-from startup_tests.test_manager import add_test, run_all_tests, TestStatus
+from os import path
+from configparser import NoOptionError, NoSectionError, ConfigParser
+#import sections
+from startup_tests.test_manager import run_all_tests, TestStatus
 import codecs
 import select
 from threading import Thread
@@ -46,7 +44,9 @@ def images(filename):
 
 # global
 
-status = dict()
+status = list()
+app_config = dict()
+darkice_config = dict()
 json_content_type = 'application/json'
 darkice = None
 darkice_stdout_queue = Queue()
@@ -54,11 +54,42 @@ darkice_stderr_queue = Queue()
 
 
 def init():
-    global status
-    status.clear()
-    status = run_all_tests()
-    print(status)
+    global status, app_config, darkice_config
 
+    print("...")
+    print("server starting up")
+    status = []
+
+    print("loading config file")
+    app_config_file = open(path.join('config', 'pi_stream.ini'))
+    app_config.clear()
+    app_config, app_config_parser_errors = parse_app_config(app_config_file)
+    app_config_file.close()
+
+    if len(app_config_parser_errors) != 0:
+        status.append(app_config_parser_errors)
+
+    if len(app_config) != 0:  # no errors
+        print("loading default/optimal darkice config")
+        darkice_config_file = open(app_config['defaultConfig'])
+        darkice_config, darkice_config_parser_errors = config.init_config(darkice_config_file)
+        darkice_config_file.close()
+
+        if len(darkice_config_parser_errors) != 0:
+            status.append(darkice_config_parser_errors)
+
+    print("running status test")
+    status = run_all_tests()
+
+
+def parse_app_config(config_file):
+    parser = ConfigParser()
+    parser.read_file(config_file)
+    try:
+        return parser['pistream'], []
+    except KeyError:
+        print u"Section {0} not found in pi_stream.ini file. Please check the file".format(u'pistream')
+        return {}, [(TestStatus.Error, u"Section {0} not found in pi_stream.ini file. Please check the file".format(u'pistream'))]
 
 @get('/run-tests')
 def run_all_tests_http():
@@ -144,18 +175,11 @@ def get_stream_status():
         print('no error yet')
     else:
         print errors
-    #print "lines:"
-    #print ""
-    #print lines
-    #print "erereresosorsr:"
-    #print ""
-    #print errors
-    #print type(errors)
+
     errors_from_lines = filter(None, [parse_lines_for_error(line) for line in lines.split(linesep)])
-    print(errors_from_lines)
     error_messages = filter(None, [parse_errors(error) for error in errors.split(linesep)])
     error_messages.extend(errors_from_lines)
-    print(error_messages)
+
     return {'link': 'http://panel9.serverhostingcenter.com:2199/tunein/yfgmkhow-stream.pls', 'errors': len(error_messages), 'messages': error_messages}
 
 
@@ -180,8 +204,8 @@ def index():
     # render all the templates
     content = u''  # content from templates
     server_index = 0
-    for name, section in sections.iteritems():
-        content += template(section.template, context=section)
+    #for name, section in sections.iteritems():
+        #content += template(section.template, context=section)
     return template('template.html', context=content)
 
 

@@ -213,4 +213,5 @@ var piStream = (function ($, Vue, superagent) {
 
 $(document).ready(function(){
 	piStream.init();
+	$(document).scrollTop(0);
 })

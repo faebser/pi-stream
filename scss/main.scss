@@ -168,12 +168,15 @@ input.button {
 	.innerWrapper {
 		@include inline-block;
 		max-width: 500px;
+		padding: 1em 0;
 		.top {
 			form {
 				margin-top: 3.125em;
 				fieldset {
 					.field {
 						position: relative;
+						border-bottom: 10px solid $form-boxes;
+						margin-bottom: 1em;
 						label {
 							position: absolute;
 							right: 0.25em;
@@ -183,18 +186,20 @@ input.button {
 						input,
 						label {
 							font-size: 0.9em;
-							padding: 0.5em 0.25em;
+							padding: 1em 0.5em;
 							//margin: 0.5em auto;
 							display: block;
 							font-family: 'source sans pro';
 						}
 						input {
-							margin: 0.5em auto;
+							margin: 0.5em auto 0 auto;
 							width: 100%;
-							border: 2px solid $form-boxes;
-							@include border-radius(3px);
+							//border: 2px solid $form-boxes;
+							border: none;
+							border-bottom: 2px solid transparent;
+							background-color: lighten($form-boxes, 35%);
+							@include border-top-radius(5px);
 							color: $font-normal;
-							background-color: white;
 							&:active,
 							&:focus {
 								//box-shadow: 0px 0px 2px #34495e;
@@ -202,7 +207,8 @@ input.button {
 								&:valid,
 								&.valid {
 									//box-shadow: 0px 0px 3px $good-normal;
-									border: 2px solid $good-normal;
+									border-bottom: 2px solid $good-normal;
+									//background-color: lighten($good-normal, 35%);
 								}
 								&:invalid,
 								&.invalid {
