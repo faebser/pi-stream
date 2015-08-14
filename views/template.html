@@ -5,56 +5,97 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <title>Tweaklab Raspi Cloner</title>
+    <link href='http://fonts.googleapis.com/css?family=Press+Start+2P' rel='stylesheet' type='text/css'>
+      <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
 
     <!-- Bootstrap -->
     <link href="main.css" rel="stylesheet">
 
   </head>
   <body>
-    <div class="wrapper">
+    <div class="wrapper" id="app">
       <div class="innerWrapper">
-        <img src="logo.jpg" id="logo">
+        <!-- <img src="logo.jpg" id="logo"> -->
         <div class="top">
-          <form id="streamForm" v-class="formClass">
-            <fieldset>
-              <!-- <legend>Stream Info</legend> -->
-              <div class="field">
-                <label for="name">Name</label>
-                <input id="name" v-model="name.value" v-class="name.class" required type="text" name="name">
-              </div>
-              <div class="field">
-                <label for="description">Description</label><input v-class="description.class" v-model="description.value" required type="text" name="description">
-              </div>
-              <div class="field">
-                <label for="url">URL</label><input v-class="url.class" v-model="url.value" required type="url" name="url">
-              </div>
-             <div class="field">
-                <label for="genre">Genre</label><input v-class="genre.class" v-model="genre.value" type="text" name="gerne">
-              </div>
-              <!-- <input type="submit" value="STREAM" class="button good">-->
-            </fieldset>
-          </form>
+          <stream-form v-if="">
+          </stream-form>
         </div>
+
         <div class="bottom">
-          <div class="errorList">
-            <ul>
-              <li v-repeat="items" v-class="class">
-                <i class="icon" v-class="icon"></i>
-                <span v-text="message"></span>
-              </li>
-              <!-- <li class="error"><i class="icon icon-cross_mark"></i>I could not reach switch.ch after {} seconds of trying. Please make sure that I'm connected to the internet</li>
-              <li class="attention"><i class="icon icon-information_white"></i>Wrong IP, may work but please check your settings</li>
-            -->
-            </ul>
-          </div>
+          <error-list class="errorList box" v-if="state.store.hasStatusItems">
+          </error-list>
+                
+
           <p class="buttons">
-            <a class="button good" v-class="class" v-on="click: buttonTrigger">
-              <span v-class="spanClass" v-text="spanText">Loading...</span> {{ title|uppercase }}
-            </a>
+            <stream-button v-if="!state.store.hasStatusItems">
+            </stream-button>
+            
+            <test-button v-if="state.store.hasStatusItems">
+            </test-button>
           </p>
+
         </div>
        
       </div>
+    </div>
+
+    <div id="templates">
+
+      <div id="errorListTemplate">
+        <h1>Status</h1>
+        <ul>
+          <li v-repeat="state.store.statusList" class="innerBox" v-class="class">
+            <div class="innerGradientBox">
+            <i class="icon" v-class="icon"></i>
+            <h4 v-text="title"></h4>
+            <p v-text="message"></p>  
+          </div>
+          </li>
+        </ul>
+      </div>
+
+      <div id="streamFormTemplate">
+         <form id="streamForm" v-class="formClass" class="box">
+              <h1>Configuration</h1>
+              <fieldset>
+              <div class="field innerBox">
+                  <div class="innerGradientBox">
+                    <label for="name">Name</label>
+                    <input id="name" v-model="state.formData.name.value" v-class="name.class" required type="text" name="name">
+                  </div>
+              </div>
+              <div class="field innerBox">
+                <div class="innerGradientBox">
+                  <label for="description">Description</label>
+                  <input v-class="description.class" v-model="state.formData.description.value" required type="text" name="description">
+                  </div>
+                </div>
+              <div class="field innerBox">
+                  <div class="fieldInner innerGradientBox">
+                <label for="url">URL</label><input v-class="url.class" v-model="state.formData.url.value" required type="url" name="url">
+              </div>
+                  </div>
+             <div class="field innerBox">
+                <div class="fieldInner innerGradientBox">
+                  <label for="genre">Genre</label><input v-class="genre.class" v-model="state.formData.genre.value" type="text" name="gerne">
+                </div>
+              </div>
+            </fieldset>
+          </form>
+      </div>
+
+      <div id="streamButtonTemplate">
+        <a class="button good" v-class="class" v-on="click: state.testStreamForm">
+          <span v-class="spanClass" v-text="spanText"></span> {{ 'Stream'|uppercase }}
+        </a>
+      </div>
+
+      <div id="testButtonTemplate">
+        <a class="button bad" v-class="class" v-on="click: state.rerunTests">
+          <span v-class="spanClass" v-text="spanText"></span> {{ 'Run Tests'|uppercase }}
+        </a>
+      </div>
+
     </div>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="jquery.min.js"></script>

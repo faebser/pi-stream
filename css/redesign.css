@@ -1,0 +1,11 @@
+/* line 65, ../scss/_util.scss */
+.clearfix:before, .clearfix:after {
+  content: " ";
+  /* 1 */
+  display: table;
+  /* 2 */
+}
+/* line 71, ../scss/_util.scss */
+.clearfix:after {
+  clear: both;
+}

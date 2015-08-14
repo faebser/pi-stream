@@ -1,3 +1,213 @@
+// build a store that connets the state to the backend
+var backendStore = (function ($, Vue, superagent) {
+	// javascript module pattern
+	"use strict"; // enable strict mode for javascript module
+	// private vars
+	var urls = {
+			'status': '/status',
+			'tests': '/run-tests',
+			'stream': '/stream'
+	},
+	icons = {
+			error: 'icon-cross_mark',
+			info: 'icon-information_white'
+	},
+	module = {
+		statusList: [],
+		hasStatusItems : false
+	};
+	// private methods
+	var statusListFilter = function (item) {
+		return item.status !== 'good';
+	},
+	statusListMap = function (item) {
+		var icon = icons.error;
+		var title = 'Error';
+
+		console.log(item.status === 'attention');
+
+		if(item.status === 'attention') { 
+			icon = icons.info;
+			title = 'Warning';
+		}
+
+		console.log(icon);
+		return {
+			'class': item.status,
+			'icon': icon,
+			'message': item.message,
+			'title': title
+		}
+	};
+	// public methods
+	module.init = function () {
+		module.getStatus();
+	},
+	module.getStatus = function () {
+		var self = this;
+		superagent.get(urls.status)
+			.end(function (error, response) {
+				module.statusList = response.body.filter(statusListFilter).map(statusListMap);
+				module.hasStatusItems = module.statusList.length !== 0;
+				console.log(module.statusList);
+				console.log(module.hasStatusItems);
+			});
+	};
+	//return the module
+	return module;
+}(jQuery, Vue, superagent));
+
+// build two components
+// build a function that returns an intial state (global vars are not fun, but in this case its like a user session)
+// use the module pattern for the state
+
+var stateFactory = (function ($, backendStore) {
+	// javascript module pattern
+	"use strict"; // enable strict mode for javascript module
+	// private vars
+	var initalState = {
+		'isStreaming': false,
+		'isValidForm': false,
+		'errorList': [],
+		'formData': {
+			name: {
+				value: '',
+				valid: simpleValidator
+			},
+			description: {
+				value: '',
+				valid: simpleValidator
+			},
+			url: {
+				value: 'nonoradio.tumblr.com',
+				valid: simpleUrlValidator
+			},
+			genre: {
+				value: '',
+				valid: function () {
+					return true;
+				}
+			}
+		},
+		'store': {}
+	},
+	module = {};
+	// private methods
+	var simpleValidator = function () {
+		if(this.value != '') return true;
+		return false;
+	},
+	simpleUrlValidator = function () {
+		var aElement;
+		if(this.value.indexOf('http://') !== 1 || this.value.indexOf('https://') !== 1) {
+			aElement = $('<a />').attr('href', 'http://' + this.value);
+		}
+		else {
+			aElement = $('<a />').attr('href', this.value);
+		}
+
+		console.log(aElement.hostname);
+
+		return Boolean(aElement.hostname);
+	};
+	// public methods
+	module.init = function (options) {
+		backendStore.init();
+		initalState.store = backendStore;
+		return $.extend(initalState, options);
+	};
+	//return the module
+	return module;
+}(jQuery, backendStore));
+
+var app = (function ($, Vue, superagent) {
+	// javascript module pattern
+	"use strict"; // enable strict mode for javascript module
+	// private vars
+	var module = {};
+	// private methods
+	// public methods
+	module.init = function () {
+		var state = stateFactory.init();
+		// with this state, build the components
+		// js pass by ref should be able to update the state inside the components
+
+		var errorListComponent = Vue.extend({
+			'data': {
+				state: state
+			},
+			'template': $('#errorListTemplate').html(),
+			methods: {
+				clickTest: function () {
+					this.state.urls.status = 'test3';
+					console.log(state.urls.status);
+				},
+				getStatus: function () {
+					
+				}
+			},
+			created: function () {
+				console.log('i raise master');
+				
+			}
+		});
+
+		var streamFormComponent = Vue.extend({
+			'data': {
+				state: state
+			},
+			'template': $('#streamFormTemplate').html(),
+			created: function () {
+				console.log('i raise too, master!');
+			}
+		});
+
+		var streamButtonComponent = Vue.extend({
+			'data': {
+				state: state
+			},
+			template: $('#streamButtonTemplate').html(),
+			created: function () {
+				console.log('the button raises to be clicked!');
+			}
+		});
+
+		var testButtonComponent = Vue.extend({
+			data: {
+				state: state
+			},
+			template: $('#testButtonTemplate').html()
+		});
+
+		Vue.component('error-list', errorListComponent);
+		Vue.component('stream-form', streamFormComponent);
+		Vue.component('stream-button', streamButtonComponent);
+		Vue.component('test-button', testButtonComponent);
+
+		var mainApp = new Vue({
+			el: '#app',
+			data: {
+				'state': state
+			},
+			components: {
+				'errorList': errorListComponent,
+				'streamForm': streamFormComponent,
+				'streamButton': streamButtonComponent,
+				'testButton': testButtonComponent
+			},
+			methods: {
+
+			},
+			created: function () {
+				console.log('main app init');
+			}
+		});
+	};
+	//return the module
+	return module;
+}(jQuery, Vue, superagent));
+
+
 var piStream = (function ($, Vue, superagent) {
 	// javascript module pattern
 	"use strict"; // enable strict mode for javascript module
@@ -15,8 +225,13 @@ var piStream = (function ($, Vue, superagent) {
 	// private methods
 	var errorMap = function(object) {
 		if(object && object.status && object.status !== 'good') {
-			var icon = 'icon-cross_mark'
-			if(object.status === 'attention') icon = 'icon-information_white';
+			var icon = 'icon-cross_mark';
+			var message = '<span>Error:</span>' + object.message;
+
+			if(object.status === 'attention') {
+				icon = 'icon-information_white';
+				message = '<span>Warning:</span>' + object.message;
+			} 
 			return {
 				'class': object.status,
 				'icon': icon,
@@ -212,6 +427,7 @@ var piStream = (function ($, Vue, superagent) {
 }(jQuery, Vue, superagent));
 
 $(document).ready(function(){
-	piStream.init();
+	//piStream.init();
+	app.init();
 	$(document).scrollTop(0);
 })
