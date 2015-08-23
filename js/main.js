@@ -24,14 +24,11 @@ var backendStore = (function ($, Vue, superagent) {
 		var icon = icons.error;
 		var title = 'Error';
 
-		console.log(item.status === 'attention');
-
 		if(item.status === 'attention') { 
 			icon = icons.info;
 			title = 'Warning';
 		}
 
-		console.log(icon);
 		return {
 			'class': item.status,
 			'icon': icon,
@@ -49,8 +46,6 @@ var backendStore = (function ($, Vue, superagent) {
 			.end(function (error, response) {
 				module.statusList = response.body.filter(statusListFilter).map(statusListMap);
 				module.hasStatusItems = module.statusList.length !== 0;
-				console.log(module.statusList);
-				console.log(module.hasStatusItems);
 			});
 	};
 	//return the module
@@ -64,34 +59,7 @@ var backendStore = (function ($, Vue, superagent) {
 var stateFactory = (function ($, backendStore) {
 	// javascript module pattern
 	"use strict"; // enable strict mode for javascript module
-	// private vars
-	var initalState = {
-		'isStreaming': false,
-		'isValidForm': false,
-		'errorList': [],
-		'formData': {
-			name: {
-				value: '',
-				valid: simpleValidator
-			},
-			description: {
-				value: '',
-				valid: simpleValidator
-			},
-			url: {
-				value: 'nonoradio.tumblr.com',
-				valid: simpleUrlValidator
-			},
-			genre: {
-				value: '',
-				valid: function () {
-					return true;
-				}
-			}
-		},
-		'store': {}
-	},
-	module = {};
+
 	// private methods
 	var simpleValidator = function () {
 		if(this.value != '') return true;
@@ -106,10 +74,41 @@ var stateFactory = (function ($, backendStore) {
 			aElement = $('<a />').attr('href', this.value);
 		}
 
-		console.log(aElement.hostname);
-
-		return Boolean(aElement.hostname);
+		return Boolean(aElement.get(0).hostname);
 	};
+
+	// private vars
+	var initalState = {
+		'isStreaming': false,
+		'isValidForm': false,
+		'errorList': [],
+		'formData': {
+			name: {
+				value: '',
+				validator: simpleValidator,
+				isValid: false
+			},
+			description: {
+				value: '',
+				validator: simpleValidator,
+				isValid: false
+			},
+			url: {
+				value: 'nonoradio.tumblr.com',
+				validator: simpleUrlValidator,
+				isValid: false
+			},
+			genre: {
+				value: '',
+				validator: function () {
+					return true;
+				},
+				isValid: true
+			}
+		},
+		'store': {}
+	},
+	module = {};
 	// public methods
 	module.init = function (options) {
 		backendStore.init();
@@ -153,12 +152,32 @@ var app = (function ($, Vue, superagent) {
 		});
 
 		var streamFormComponent = Vue.extend({
-			'data': {
-				state: state
+			data: {
+				state: state,
+				timeout: -1
 			},
-			'template': $('#streamFormTemplate').html(),
+			template: $('#streamFormTemplate').html(),
+			methods: {
+				testForm: function () {
+					var self = this;
+					// add timeout to check values after a while, ca 200 ms or else cancel timeout
+					if (self.timeout !== -1) {
+						window.clearTimeout(self.timeout);
+					}
+					this.timeout = window.setTimeout(function () {
+						console.log("called thiem butler, my master. whhyy?", self.timeout);
+						self.validateForm();
+					}, 200);
+				},
+				validateForm: function validateForm () {
+					_.forEach(state.formData, function validateForm (element, index) {
+						element.isValid = element.validator();
+					});
+				}
+			},
 			created: function () {
 				console.log('i raise too, master!');
+				this.validateForm();
 			}
 		});
 
@@ -167,6 +186,11 @@ var app = (function ($, Vue, superagent) {
 				state: state
 			},
 			template: $('#streamButtonTemplate').html(),
+			methods: {
+				runStream: function () {
+					return;
+				}
+			},
 			created: function () {
 				console.log('the button raises to be clicked!');
 			}

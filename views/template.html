@@ -22,16 +22,19 @@
         </div>
 
         <div class="bottom">
-          <error-list class="errorList box" v-if="state.store.hasStatusItems">
-          </error-list>
+          <error-list class="errorList" v-if="state.store.hasStatusItems"></error-list>
                 
 
           <p class="buttons">
-            <stream-button v-if="!state.store.hasStatusItems">
-            </stream-button>
-            
-            <test-button v-if="state.store.hasStatusItems">
-            </test-button>
+
+            <div class="box">
+              <stream-button v-if="!state.store.hasStatusItems">
+              </stream-button>
+              
+              <test-button v-if="state.store.hasStatusItems">
+              </test-button>
+            </div>
+
           </p>
 
         </div>
@@ -42,12 +45,14 @@
     <div id="templates">
 
       <div id="errorListTemplate">
-        <h1>Status</h1>
-        <ul>
+        <div class="box header">
+          <h1>Status</h1>
+        </div>
+
+        <ul class="box">
           <li v-repeat="state.store.statusList" class="innerBox" v-class="class">
             <div class="innerGradientBox">
             <i class="icon" v-class="icon"></i>
-            <h4 v-text="title"></h4>
             <p v-text="message"></p>  
           </div>
           </li>
@@ -55,29 +60,35 @@
       </div>
 
       <div id="streamFormTemplate">
-         <form id="streamForm" v-class="formClass" class="box">
-              <h1>Configuration</h1>
+        <div class="box header">
+          <h1>Configuration</h1>
+        </div>
+         <form id="streamForm" v-class="formClass" class="box" v-on="keyup: testForm">
               <fieldset>
               <div class="field innerBox">
                   <div class="innerGradientBox">
                     <label for="name">Name</label>
                     <input id="name" v-model="state.formData.name.value" v-class="name.class" required type="text" name="name">
+                    <i class="icon icon-cross_mark" v-class="valid: state.formData.name.isValid"></i>
                   </div>
               </div>
               <div class="field innerBox">
                 <div class="innerGradientBox">
                   <label for="description">Description</label>
                   <input v-class="description.class" v-model="state.formData.description.value" required type="text" name="description">
+                  <i class="icon icon-cross_mark" v-class="valid: state.formData.description.isValid"></i>
                   </div>
                 </div>
               <div class="field innerBox">
                   <div class="fieldInner innerGradientBox">
                 <label for="url">URL</label><input v-class="url.class" v-model="state.formData.url.value" required type="url" name="url">
+                <i class="icon icon-cross_mark" v-class="valid: state.formData.url.isValid"></i>
               </div>
                   </div>
              <div class="field innerBox">
                 <div class="fieldInner innerGradientBox">
                   <label for="genre">Genre</label><input v-class="genre.class" v-model="state.formData.genre.value" type="text" name="gerne">
+                  <i class="icon icon-cross_mark" v-class="valid: state.formData.genre.isValid"></i>
                 </div>
               </div>
             </fieldset>
@@ -85,7 +96,7 @@
       </div>
 
       <div id="streamButtonTemplate">
-        <a class="button good" v-class="class" v-on="click: state.testStreamForm">
+        <a class="button good" v-class="class" v-on="click: runStream">
           <span v-class="spanClass" v-text="spanText"></span> {{ 'Stream'|uppercase }}
         </a>
       </div>
@@ -101,10 +112,11 @@
     <script src="jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed
     <script src="bootstrap.min.js"></script> -->
-    <script src="mustache.js"></script>
     <script src="vue.js"></script>
     <script src="superagent.js"></script>
+    <script type="text/javascript" src="lodash.js"> </script>
     <script src="main.js"></script>
+    
 
   </body>
 </html>

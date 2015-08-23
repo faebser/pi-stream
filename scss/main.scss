@@ -87,11 +87,12 @@ body,
 
 @import "compass/css3/box-shadow";
 @import "compass/css3/border-radius";
+@import "compass/css3/transition";
 
 @import 'spinners';
 
 .button {
-	font-family: 'Source Code Pro bold';
+
 	cursor: pointer;
 	letter-spacing: 0.8px;
 	word-spacing: 1.4px;
@@ -100,19 +101,20 @@ body,
 	padding: 0.5em 1.2em;
 	color: rgb(240, 240, 240);
 	transition: all 0.5s ease;
-	margin-bottom: 6px;
-	margin-top: 2em;
+	@include box-shadow(0.4rem 0.45rem 0px 1px #111);
+	//margin-bottom: 6px;
+	//margin-top: 2em;
 	&.good {
 		background-color: $good-normal;
-		@include border-radius(6px);
-		@include box-shadow(0px 6px 0px $good-dark);
+		// @include border-radius(6px);
+		// @include box-shadow(0px 6px 0px $good-dark);
 	}
 
 	&.bad {
 		background-color: $bad-normal;
-		@include border-radius(6px);
-		@include box-shadow(0px 6px 0px $bad-dark);
-	}
+		// @include border-radius(6px);
+		// @include box-shadow(0px 6px 0px $bad-dark);
+	}	
 }
 
 input.button {
@@ -126,10 +128,11 @@ input.button {
 	font-family: 'Source Code Pro';
 	.innerWrapper {
 		@include inline-block;
+		width: 100%;
 		max-width: 600px;
 		padding: 1rem 1rem;
 		h1 {
-			padding: 0 0 1.5rem 0;
+			//padding: 0 0 1.5rem 0;
 			font-size: 1.5rem;
 			text-align: left;
 			background-color: rgb(197, 197, 197);
@@ -137,12 +140,18 @@ input.button {
 		.box {
 			background-color: rgb(197, 197, 197);
 			@include box-shadow(0.4rem 0.45rem 0px 1px #111);
-			padding: 1rem 1.7rem 1rem 1.7rem;
-			margin-bottom: 1.5rem;
+			padding: 1.7rem;
+			margin-bottom: 2.2rem;
+			&.header {
+				margin-bottom: 0.7rem;
+			}
 			.innerBox {
 				@include background(linear-gradient(to bottom right, hsl(281, 29%, 29%), #AEAEAE));
 				padding: 0.3rem;
 				margin-bottom: 1.5rem;
+				&:last-child {
+					margin-bottom: 0;
+				}
 				.innerGradientBox {
 					background-color: #c5c5c5;
 					padding: 1.5rem 1.5rem;
@@ -159,13 +168,29 @@ input.button {
 						position: relative;
 						//border-bottom: 10px solid $form-boxes;
 						//border: 1px solid white;
+						
 						input,
-						label {
+						label,
+						i {
 							font-size: 1rem;
 							padding: 1rem 0.5rem;
 							//margin: 0.5em auto;
 							display: block;
 							font-family: 'Source Code Pro';
+						}
+						i {
+							font-size: 1rem;
+							display: inline-block;
+							position: absolute;
+							right: 0;
+							top: 0;
+							margin: 1.8rem 1.8rem 2.3rem 0rem;
+							border: 2px solid transparent;
+							color: $bad-normal;
+							@include transition(all linear 0.2s);
+							&.valid {
+								color: #fff;
+							}
 						}
 						label {	
 							color: $font-normal;
@@ -178,12 +203,12 @@ input.button {
 							margin: 0rem 1rem 0.5rem 0rem;
 							width: 100%;
 							//border: 2px solid $form-boxes;
-							border: none;
 							@include box-shadow(0.4rem 0.45rem 0px 1px #111); 
 							//border-bottom: 2px solid transparent;
 							//background-color: lighten($form-boxes, 35%);
 							//@include border-top-radius(5px);
-							border: 2px solid transparent;
+							//border: 2px solid transparent;
+							border: none;
 							color: $font-normal;
 							&:active,
 							&:focus {
@@ -192,22 +217,22 @@ input.button {
 								&:valid,
 								&.valid {
 									//box-shadow: 0px 0px 3px $good-normal;
-									border: 2px solid $good-normal;
+									//border: 2px solid $good-normal;
 									//background-color: lighten($good-normal, 35%);
 								}
 								&:invalid,
 								&.invalid {
 									//box-shadow: 0px 0px 3px $bad-normal;
-									border: 2px solid $bad-normal;
+									//border: 2px solid $bad-normal;
 								}
 							}
 							&.valid {
 								//box-shadow: 0px 0px 3px $good-normal;
-								border: 2px solid $good-normal;
+								//border: 2px solid $good-normal;
 							}
 							&.invalid {
 								//box-shadow: 0px 0px 3px $bad-normal;
-								border: 2px solid $bad-normal;
+								//border: 2px solid $bad-normal;
 							}
 						}
 					}
@@ -229,10 +254,8 @@ input.button {
 }
 
 .wrapper .bottom .errorList {
-	display: blocK;
-	margin: 0.5em auto;
+	display: block;
 	text-align: left;
-	padding: 1rem;
 	h1 {
 		font-family: 'Source Code Pro';
 	}
