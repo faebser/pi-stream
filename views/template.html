@@ -17,7 +17,9 @@
       <div class="innerWrapper">
         <!-- <img src="logo.jpg" id="logo"> -->
         <div class="top">
-          <stream-form v-if="">
+          <!-- <stream-form v-if="!state.store.hasStatusItems">
+          </stream-form> -->
+          <stream-form>
           </stream-form>
         </div>
 
@@ -38,7 +40,6 @@
           </p>
 
         </div>
-       
       </div>
     </div>
 
@@ -49,7 +50,13 @@
           <h1>Status</h1>
         </div>
 
-        <ul class="box">
+        <ul class="box" v-if="state.statusListLoading">
+          <li >
+            <p>Loading...</p>
+          </li>
+        </ul>
+
+        <ul class="box" v-if="!state.statusListLoading">
           <li v-repeat="state.store.statusList" class="innerBox" v-class="class">
             <div class="innerGradientBox">
             <i class="icon" v-class="icon"></i>
@@ -102,7 +109,7 @@
       </div>
 
       <div id="testButtonTemplate">
-        <a class="button bad" v-class="class" v-on="click: state.rerunTests">
+        <a class="button bad" v-class="class" v-on="click: rerunTests">
           <span v-class="spanClass" v-text="spanText"></span> {{ 'Run Tests'|uppercase }}
         </a>
       </div>
@@ -113,6 +120,7 @@
     <!-- Include all compiled plugins (below), or include individual files as needed
     <script src="bootstrap.min.js"></script> -->
     <script src="vue.js"></script>
+    <script src="plite.js"></script>
     <script src="superagent.js"></script>
     <script type="text/javascript" src="lodash.js"> </script>
     <script src="main.js"></script>

@@ -1,5 +1,5 @@
 // build a store that connets the state to the backend
-var backendStore = (function ($, Vue, superagent) {
+var backendStore = (function ($, Vue, superagent, Plite) {
 	// javascript module pattern
 	"use strict"; // enable strict mode for javascript module
 	// private vars
@@ -35,22 +35,68 @@ var backendStore = (function ($, Vue, superagent) {
 			'message': item.message,
 			'title': title
 		}
+	},
+	updateStatusList = function updateStatusList (response) {
+		module.statusList = response.body.filter(statusListFilter).map(statusListMap);
+		module.hasStatusItems = module.statusList.length !== 0;
 	};
 	// public methods
 	module.init = function () {
-		module.getStatus();
+		//module.getStatus();
 	},
 	module.getStatus = function () {
 		var self = this;
 		superagent.get(urls.status)
 			.end(function (error, response) {
-				module.statusList = response.body.filter(statusListFilter).map(statusListMap);
-				module.hasStatusItems = module.statusList.length !== 0;
+				if(!Boolean(error)) {
+					updateStatusList(response);
+				}
 			});
+	},
+	module.sendStreamFormData = function (formData) {
+		var serializedObject = JSON.stringify(formData);
+		var promise = new Plite();
+
+		superagent
+			.post(urls.stream)
+			.send(formData)
+			.end(function (error, response) {
+				if(error) {
+					promise.reject(error);
+				}
+				else {
+					promise.resolve(response);
+				}
+				console.log(error);
+				console.log(response);
+			});
+
+		return promise;
+	},
+	module.rerunTests = function () {
+		var promise = Plite();
+
+		superagent
+			.get(urls.tests)
+			.end(function getResponse (error, response) {
+				if(error) {
+					promise.reject(error);
+				}
+				else {
+					module.statusList = [];
+					updateStatusList(response);
+					promise.resolve();
+				}
+
+				console.log(error);
+				console.log(response);
+			});
+
+		return promise;
 	};
 	//return the module
 	return module;
-}(jQuery, Vue, superagent));
+}(jQuery, Vue, superagent, Plite));
 
 // build two components
 // build a function that returns an intial state (global vars are not fun, but in this case its like a user session)
@@ -65,15 +111,22 @@ var stateFactory = (function ($, backendStore) {
 		if(this.value != '') return true;
 		return false;
 	},
-	simpleUrlValidator = function () {
+	toJSON = function () {
+		return this.value;
+	},
+	makeAelementOutOfString = function (inputString) {
 		var aElement;
-		if(this.value.indexOf('http://') !== 1 || this.value.indexOf('https://') !== 1) {
-			aElement = $('<a />').attr('href', 'http://' + this.value);
+		if(inputString.indexOf('http://') !== 1 || inputString.indexOf('https://') !== 1) {
+			aElement = $('<a />').attr('href', 'http://' + inputString);
 		}
 		else {
-			aElement = $('<a />').attr('href', this.value);
+			aElement = $('<a />').attr('href', inputString);
 		}
 
+		return aElement;
+	},
+	simpleUrlValidator = function () {
+		var aElement = makeAelementOutOfString(this.value);
 		return Boolean(aElement.get(0).hostname);
 	};
 
@@ -86,24 +139,30 @@ var stateFactory = (function ($, backendStore) {
 			name: {
 				value: '',
 				validator: simpleValidator,
-				isValid: false
+				isValid: false,
+				toJSON: toJSON
 			},
 			description: {
 				value: '',
 				validator: simpleValidator,
-				isValid: false
+				isValid: false,
+				toJSON: toJSON
 			},
 			url: {
 				value: 'nonoradio.tumblr.com',
 				validator: simpleUrlValidator,
-				isValid: false
+				isValid: false,
+				toJSON: function () {
+					return makeAelementOutOfString(this.value).get(0).href;
+				}
 			},
 			genre: {
 				value: '',
 				validator: function () {
 					return true;
 				},
-				isValid: true
+				isValid: true,
+				toJSON: toJSON
 			}
 		},
 		'store': {}
@@ -128,6 +187,7 @@ var app = (function ($, Vue, superagent) {
 	// public methods
 	module.init = function () {
 		var state = stateFactory.init();
+		state.store.getStatus();
 		// with this state, build the components
 		// js pass by ref should be able to update the state inside the components
 
@@ -140,14 +200,10 @@ var app = (function ($, Vue, superagent) {
 				clickTest: function () {
 					this.state.urls.status = 'test3';
 					console.log(state.urls.status);
-				},
-				getStatus: function () {
-					
 				}
 			},
 			created: function () {
 				console.log('i raise master');
-				
 			}
 		});
 
@@ -165,12 +221,11 @@ var app = (function ($, Vue, superagent) {
 						window.clearTimeout(self.timeout);
 					}
 					this.timeout = window.setTimeout(function () {
-						console.log("called thiem butler, my master. whhyy?", self.timeout);
 						self.validateForm();
 					}, 200);
 				},
 				validateForm: function validateForm () {
-					_.forEach(state.formData, function validateForm (element, index) {
+					_.forEach(state.formData, function validateForm (element) {
 						element.isValid = element.validator();
 					});
 				}
@@ -188,7 +243,7 @@ var app = (function ($, Vue, superagent) {
 			template: $('#streamButtonTemplate').html(),
 			methods: {
 				runStream: function () {
-					return;
+					this.state.store.sendStreamFormData(this.state.formData);
 				}
 			},
 			created: function () {
@@ -199,6 +254,21 @@ var app = (function ($, Vue, superagent) {
 		var testButtonComponent = Vue.extend({
 			data: {
 				state: state
+			},
+			methods: {
+				rerunTests: function () {
+					var self = this;
+					self.state.statusListLoading = true;
+					self.state.store.rerunTests()
+						.then(
+							function success () {
+								self.state.statusListLoading = false;
+							},
+							function error (error) {
+								console.log(error);
+							}
+						);
+				}
 			},
 			template: $('#testButtonTemplate').html()
 		});
@@ -231,224 +301,6 @@ var app = (function ($, Vue, superagent) {
 	return module;
 }(jQuery, Vue, superagent));
 
-
-var piStream = (function ($, Vue, superagent) {
-	// javascript module pattern
-	"use strict"; // enable strict mode for javascript module
-	// private vars
-	var module = {},
-		status = null,
-		errorList = null,
-		bigButton = null,
-		streamForm = null,
-		urls = {
-			'status': '/status',
-			'tests': '/run-tests',
-			'stream': '/stream'
-		};
-	// private methods
-	var errorMap = function(object) {
-		if(object && object.status && object.status !== 'good') {
-			var icon = 'icon-cross_mark';
-			var message = '<span>Error:</span>' + object.message;
-
-			if(object.status === 'attention') {
-				icon = 'icon-information_white';
-				message = '<span>Warning:</span>' + object.message;
-			} 
-			return {
-				'class': object.status,
-				'icon': icon,
-				'message': object.message
-			}
-		}
-	},
-	runStream = function (callback) {
-		// validate form - nope
-		// submit form
-		var isFormValid = true;
-		for (var i in streamForm.$data) {
-			var e = streamForm.$data[i];
-
-			if(e) {
-				if(e.valid() === false) {
-					isFormValid = false;
-					e.class = "invalid";
-				}
-				else {
-					e.class = 'valid';
-				}
-			}
-
-		};
-
-		if(isFormValid) {
-			superagent.post(urls.stream)
-				.set('Content-Type', 'application/json')
-				.send(streamForm.$data)
-				.end(function(error, response) {
-					console.log(error);
-					console.log(response);
-				});
-
-			window.setTimeout(function() {
-				superagent.get(urls.stream).end(function(response){
-					console.log(response);
-					var status = response.body;
-					if(status.errors == 0) {
-						bigButton.title = 'Darkice is running';
-						streamForm.formClass = 'hidden';
-						errorList.items.push({
-							'class': 'attention',
-							'icon': 'icon-information_white',
-							'message': 'Streaming-Link: ' + status.link
-						});
-					}
-					else {
-						errorList.items = response.body.messages.map(errorMap).filter(Boolean);
-					}
-				})
-			}, 5000)
-		}
-		else {
-			bigButton.class = 'bad';
-			bigButton.title = 'Please fix the form';
-			bigButton.action = 'stream';
-			bigButton.spanClass = 'hidden';
-			bigButton.spanText = '';
-			window.setTimeout(function() {
-				updateButton();
-			}, 5000);
-		}
-	},
-	runTests = function (callback) {
-		// rerun test
-		// update the list
-		// update buttons
-		superagent.get(urls.tests).end(function(response) {
-			status = response.body;
-			errorList.items = status.map(errorMap).filter(Boolean);
-			updateButton();
-			if(callback) callback();
-		});
-	},
-	updateButton = function () {
-		if (errorList.hasErrors) {
-			bigButton.class = 'bad';
-			bigButton.title = 'rerun tests';
-			bigButton.action = 'tests';
-			bigButton.spanText = '';
-			bigButton.spanClass = 'hidden';
-		}
-		else {
-			bigButton.class = 'good';
-			bigButton.title = 'stream';
-			bigButton.action = 'stream';
-			bigButton.spanClass = 'hidden';
-			bigButton.spanText = '';
-		}
-	};
-	// public methods
-	module.init = function () {
-		superagent.get(urls.status).end(function(response){
-	   		status = response.body;
-
-		   	errorList = new Vue({
-				'el': '.errorList',
-				'data': {
-					'items': status.map(errorMap).filter(Boolean)
-				},
-				'computed': {
-					'hasErrors': function() {
-						for(var i = 0; i < this.items.length; i++) {
-							if(this.items[i].class == 'error') return true;
-						}
-						return false;
-					}
-				}
-			});
-
-			console.log(errorList.items);
-			var errors = errorList.hasErrors;
-
-			var buttonData = {
-				'class': 'good',
-				'action': 'stream',
-				'spanClass': 'hidden',
-				'spanText': '',
-				'title': 'stream'
-			};
-
-			if(errors) {
-				buttonData.class = 'bad';
-				buttonData.title = 'rerun tests';
-				buttonData.action = 'tests';
-			}
-
-			bigButton = new Vue({
-				'el': '.buttons a',
-				'data': buttonData,
-				'methods': {
-					'buttonTrigger': function(e) {
-						if(this.action === 'stream') {
-							this.title = 'starting darkice'
-							this.spanClass = 'loading';
-							this.spanText = 'starting darkice';
-							runStream();
-						}
-						else if(this.action === 'tests') {
-							this.title = 'running tests'
-							this.spanClass = 'gauge';
-							this.spanText = 'runnig tests'; 
-							runTests();
-						}
-					}
-				}
-			});
-
-			streamForm = new Vue({
-				'el': '#streamForm',
-				'data': {
-					'formClass': '',
-					'name': {
-						'value': '',
-						'valid': function() {
-							if(this.value != '') return true;
-							return false;
-						},
-						'class': ''
-					},
-					'description': {
-						'value': '',
-						'valid': function() {
-							if(this.value != '') return true;
-							return false;
-						},
-						'class': ''
-					},
-					'url': {
-						'value': 'http://nonoradio.tumblr.com',
-						'valid': function() {
-							if(this.value != '') return true;
-							return false;
-						},
-						class: ''
-					},
-					'genre': {
-						'value': '',
-						'valid': function() {
-							return true;
-						},
-						'class': ''
-					},
-				}
-			})
-			console.log(streamForm);
-		});
-	};
-	//return the module
-	return module;
-}(jQuery, Vue, superagent));
 
 $(document).ready(function(){
 	//piStream.init();

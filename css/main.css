@@ -1847,7 +1847,7 @@ input.button {
 }
 /* line 262, ../scss/main.scss */
 .wrapper .bottom .errorList ul {
-  margin: 0.5em auto;
+  margin: 0.5em auto 2.2rem auto;
 }
 /* line 264, ../scss/main.scss */
 .wrapper .bottom .errorList ul li {

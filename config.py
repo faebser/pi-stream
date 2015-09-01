@@ -208,13 +208,13 @@ def write_to_temp_file():
 """
 
 
-def write_to_file(fp, general_section, input_section, servers):
+def write_to_file(fp, general_section, audio_section, servers):
     temp_parser = configparser.ConfigParser()
     temp_parser.optionxform = str
     for prop in general_section.property_tuple:
         add_value_from_prop(temp_parser, prop, general_section.section_name)
-    for prop in input_section.property_tuple:
-        add_value_from_prop(temp_parser, prop, input_section.section_name)
+    for prop in audio_section.property_tuple:
+        add_value_from_prop(temp_parser, prop, audio_section.section_name)
     for index, server in enumerate(servers):
         for prop in server.property_tuple:
             add_value_from_prop(temp_parser, prop, server.section_name)

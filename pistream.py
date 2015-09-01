@@ -125,14 +125,18 @@ def start_stream():
     global darkice_stdout_queue
     values = request.json
 
-    config.icecast[0].name.value = unicode(values['name']['value'])
-    config.icecast[0].genre.value = unicode(values['genre']['value'])
-    config.icecast[0].url.value = unicode(values['url']['value'])
-    config.icecast[0].description.value = unicode(values['description']['value'])
+    print values
+
+    darkice_config['servers'][0].name.value = unicode(values['name'])
+    darkice_config['servers'][0].genre.value = unicode(values['genre'])
+    darkice_config['servers'][0].url.value = unicode(values['url'])
+    darkice_config['servers'][0].description.value = unicode(values['description'])
+
+    print darkice_config
 
     try:
         with codecs.open('test.cfg', mode='wb', encoding='utf-8') as config_file:
-            config.write_to_file(config_file)
+            config.write_to_file(config_file, darkice_config['general'], darkice_config['audio'], darkice_config['servers'])
             filename = config_file.name
             print filename
     except IOError as e:
@@ -176,6 +180,9 @@ def get_stream_status():
     else:
         print errors
 
+    print lines
+    print errors
+
     errors_from_lines = filter(None, [parse_lines_for_error(line) for line in lines.split(linesep)])
     error_messages = filter(None, [parse_errors(error) for error in errors.split(linesep)])
     error_messages.extend(errors_from_lines)
@@ -201,15 +208,11 @@ def parse_errors(error):
 
 @get('/')
 def index():
-    # render all the templates
-    content = u''  # content from templates
-    server_index = 0
-    #for name, section in sections.iteritems():
-        #content += template(section.template, context=section)
-    return template('template.html', context=content)
+    # just deliver the payload
+    return template('template.html')
 
 
-@get('/sections')
+# @get('/sections')
 def get_all_section():
     """
     Return all the sections to the client
@@ -219,7 +222,7 @@ def get_all_section():
     return get_dicts()
 
 
-@get('/<section>')
+# @get('/<section>')
 def get_section(section):
     """
     Get the content of a section
@@ -233,7 +236,7 @@ def get_section(section):
         raise HTTPError(500, json.dumps({'error': u'section ' + str(section) + u' is not available'}))
 
 
-@post('/<section>/<option>')
+# @post('/<section>/<option>')
 def update(section, option):
     """
     Updates a option inside a section
@@ -253,7 +256,7 @@ def update(section, option):
         raise HTTPError(500, json.dumps({'error': u'section ' + str(section) + u" or option " + str(option) + " not available"}))
 
 
-@get('/<section>/<option>')
+# @get('/<section>/<option>')
 def get(section, option):
     """
     Returns the value of a option inside a section
