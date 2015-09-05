@@ -18,7 +18,10 @@ class IpPrivateTest(TestClass):
     name = u'Private IP'
 
     def run_test(self):
-        ip = get_ip_address('eth0')
+        try:
+            ip = get_ip_address('eth0')
+        except IOError:
+            return TestStatus.Attention, 'Network interface eth0 is not available'
         if '192.168' in ip:
             return TestStatus.Good, 'My IP-Address in private range: {})'.format(ip)
         else:
