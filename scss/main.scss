@@ -73,13 +73,16 @@ html {
 	display: none;
 }
 
+html {
+	background-color: $font-light;
+	@include background(linear-gradient(to bottom right, hsl(281, 29%, 29%), $font-light));
+	height: 100%;
+}
+
 html,
 body,
 .wrapper {
-	background-color: $font-light;
-	//border: 1px solid hsl(281, 29%, 29%);
-	//padding: 5px;
-	@include background(linear-gradient(to bottom right, hsl(281, 29%, 29%), $font-light));
+	height: 100%;	
 }
 
 /* apply a natural box layout model to all elements */
