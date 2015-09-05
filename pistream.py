@@ -125,14 +125,10 @@ def start_stream():
     global darkice_stdout_queue
     values = request.json
 
-    print values
-
     darkice_config['servers'][0].name.value = unicode(values['name'])
     darkice_config['servers'][0].genre.value = unicode(values['genre'])
     darkice_config['servers'][0].url.value = unicode(values['url'])
     darkice_config['servers'][0].description.value = unicode(values['description'])
-
-    print darkice_config
 
     try:
         with codecs.open('test.cfg', mode='wb', encoding='utf-8') as config_file:
@@ -141,7 +137,6 @@ def start_stream():
             print filename
     except IOError as e:
         print("there is an error")
-        print("stuff")
         return {'error': 'File not availabe'}
 
     darkice = subprocess.Popen('sudo darkice -c {}'.format(filename), stderr=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)

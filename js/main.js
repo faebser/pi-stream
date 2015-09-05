@@ -262,7 +262,9 @@ var app = (function ($, Vue, superagent) {
 					self.state.store.rerunTests()
 						.then(
 							function success () {
-								self.state.statusListLoading = false;
+								window.setTimeout(function () {
+									self.state.statusListLoading = false;
+								}, 500);
 							},
 							function error (error) {
 								console.log(error);
