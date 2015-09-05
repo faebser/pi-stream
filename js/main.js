@@ -14,11 +14,15 @@ var backendStore = (function ($, Vue, superagent, Plite) {
 	},
 	module = {
 		statusList: [],
-		hasStatusItems : false
+		hasStatusItems : false,
+		hasErrorItems: false
 	};
 	// private methods
 	var statusListFilter = function (item) {
 		return item.status !== 'good';
+	},
+	statusListErrorFilter = function (item) {
+		return item.status === 'error';
 	},
 	statusListMap = function (item) {
 		var icon = icons.error;
@@ -39,6 +43,7 @@ var backendStore = (function ($, Vue, superagent, Plite) {
 	updateStatusList = function updateStatusList (response) {
 		module.statusList = response.body.filter(statusListFilter).map(statusListMap);
 		module.hasStatusItems = module.statusList.length !== 0;
+		module.hasErrorItems = module.statusList.filter(statusListErrorFilter).length !== 0;
 	};
 	// public methods
 	module.init = function () {
