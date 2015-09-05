@@ -67,23 +67,6 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   display: block;
 }
 
-/* line 7, ../scss/_util.scss */
-.wrapper {
-  text-align: center;
-}
-/* line 9, ../scss/_util.scss */
-.wrapper:before {
-  content: ' ';
-  display: inline-block;
-  vertical-align: middle;
-  *vertical-align: auto;
-  *zoom: 1;
-  *display: inline;
-  height: 100%;
-  vertical-align: middle;
-  font-size: 0;
-}
-
 /* line 65, ../scss/_util.scss */
 .clearfix:before, .clearfix:after {
   content: " ";
@@ -1160,21 +1143,13 @@ html {
 }
 
 /* line 76, ../scss/main.scss */
-html {
+.wrapper {
   background-color: #507090;
   background: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzUyMzU1ZiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzUwNzA5MCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
   background: -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #52355f), color-stop(100%, #507090));
   background: -moz-linear-gradient(top, #52355f, #507090);
   background: -webkit-linear-gradient(top, #52355f, #507090);
   background: linear-gradient(to bottom right, #52355f, #507090);
-  height: 100%;
-}
-
-/* line 82, ../scss/main.scss */
-html,
-body,
-.wrapper {
-  height: 100%;
 }
 
 /* apply a natural box layout model to all elements */
@@ -1720,26 +1695,23 @@ input.button {
 
 /* line 129, ../scss/main.scss */
 .wrapper {
+  width: 100%;
   font-family: 'Source Code Pro';
 }
-/* line 132, ../scss/main.scss */
+/* line 133, ../scss/main.scss */
 .wrapper .innerWrapper {
-  display: inline-block;
-  vertical-align: middle;
-  *vertical-align: auto;
-  *zoom: 1;
-  *display: inline;
   width: 100%;
   max-width: 600px;
   padding: 1rem 1rem;
+  margin: 0 auto;
 }
-/* line 137, ../scss/main.scss */
+/* line 140, ../scss/main.scss */
 .wrapper .innerWrapper h1 {
   font-size: 1.5rem;
   text-align: left;
   background-color: #c5c5c5;
 }
-/* line 143, ../scss/main.scss */
+/* line 146, ../scss/main.scss */
 .wrapper .innerWrapper .box {
   background-color: #c5c5c5;
   -moz-box-shadow: 0.4rem 0.45rem 0px 1px #111;
@@ -1748,11 +1720,11 @@ input.button {
   padding: 1.7rem;
   margin-bottom: 2.2rem;
 }
-/* line 148, ../scss/main.scss */
+/* line 151, ../scss/main.scss */
 .wrapper .innerWrapper .box.header {
   margin-bottom: 0.7rem;
 }
-/* line 151, ../scss/main.scss */
+/* line 154, ../scss/main.scss */
 .wrapper .innerWrapper .box .innerBox {
   background: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzUyMzU1ZiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2FlYWVhZSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
   background: -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #52355f), color-stop(100%, #aeaeae));
@@ -1762,24 +1734,24 @@ input.button {
   padding: 0.3rem;
   margin-bottom: 1.5rem;
 }
-/* line 155, ../scss/main.scss */
+/* line 158, ../scss/main.scss */
 .wrapper .innerWrapper .box .innerBox:last-child {
   margin-bottom: 0;
 }
-/* line 158, ../scss/main.scss */
+/* line 161, ../scss/main.scss */
 .wrapper .innerWrapper .box .innerBox .innerGradientBox {
   background-color: #c5c5c5;
   padding: 1.5rem 1.5rem;
 }
-/* line 166, ../scss/main.scss */
+/* line 169, ../scss/main.scss */
 .wrapper .innerWrapper .top form fieldset {
   text-align: left;
 }
-/* line 170, ../scss/main.scss */
+/* line 173, ../scss/main.scss */
 .wrapper .innerWrapper .top form fieldset .field {
   position: relative;
 }
-/* line 175, ../scss/main.scss */
+/* line 178, ../scss/main.scss */
 .wrapper .innerWrapper .top form fieldset .field input,
 .wrapper .innerWrapper .top form fieldset .field label,
 .wrapper .innerWrapper .top form fieldset .field i {
@@ -1788,7 +1760,7 @@ input.button {
   display: block;
   font-family: 'Source Code Pro';
 }
-/* line 184, ../scss/main.scss */
+/* line 187, ../scss/main.scss */
 .wrapper .innerWrapper .top form fieldset .field i {
   font-size: 1rem;
   display: inline-block;
@@ -1803,11 +1775,11 @@ input.button {
   -webkit-transition: all 0.2s linear;
   transition: all 0.2s linear;
 }
-/* line 194, ../scss/main.scss */
+/* line 197, ../scss/main.scss */
 .wrapper .innerWrapper .top form fieldset .field i.valid {
   color: #fff;
 }
-/* line 198, ../scss/main.scss */
+/* line 201, ../scss/main.scss */
 .wrapper .innerWrapper .top form fieldset .field label {
   color: #34495e;
   padding: 0.4rem 0.75rem;
@@ -1815,7 +1787,7 @@ input.button {
   top: -13px;
   background-color: #c5c5c5;
 }
-/* line 205, ../scss/main.scss */
+/* line 208, ../scss/main.scss */
 .wrapper .innerWrapper .top form fieldset .field input {
   margin: 0rem 1rem 0.5rem 0rem;
   width: 100%;
@@ -1825,37 +1797,37 @@ input.button {
   border: none;
   color: #34495e;
 }
-/* line 216, ../scss/main.scss */
+/* line 219, ../scss/main.scss */
 .wrapper .innerWrapper .top form fieldset .field input:active, .wrapper .innerWrapper .top form fieldset .field input:focus {
   outline: none;
 }
-/* line 242, ../scss/main.scss */
+/* line 245, ../scss/main.scss */
 .wrapper .innerWrapper .top form fieldset legend {
   font-family: 'Source Code Pro bold';
 }
-/* line 248, ../scss/main.scss */
+/* line 251, ../scss/main.scss */
 .wrapper .innerWrapper .buttons {
   display: block;
 }
-/* line 252, ../scss/main.scss */
+/* line 255, ../scss/main.scss */
 .wrapper .innerWrapper .buttons .gauge {
   margin-right: 1em;
 }
 
-/* line 259, ../scss/main.scss */
+/* line 262, ../scss/main.scss */
 .wrapper .bottom .errorList {
   display: block;
   text-align: left;
 }
-/* line 262, ../scss/main.scss */
+/* line 265, ../scss/main.scss */
 .wrapper .bottom .errorList h1 {
   font-family: 'Source Code Pro';
 }
-/* line 265, ../scss/main.scss */
+/* line 268, ../scss/main.scss */
 .wrapper .bottom .errorList ul {
   margin: 0.5em auto 2.2rem auto;
 }
-/* line 267, ../scss/main.scss */
+/* line 270, ../scss/main.scss */
 .wrapper .bottom .errorList ul li {
   margin: 0.25em auto;
   padding: 0.5em 0.75em;
@@ -1863,26 +1835,26 @@ input.button {
   font-family: 'Source Code Pro';
   position: relative;
 }
-/* line 273, ../scss/main.scss */
+/* line 276, ../scss/main.scss */
 .wrapper .bottom .errorList ul li:first-child {
   margin-top: 0;
 }
-/* line 276, ../scss/main.scss */
+/* line 279, ../scss/main.scss */
 .wrapper .bottom .errorList ul li:last-child {
   margin-bottom: 0;
 }
-/* line 279, ../scss/main.scss */
+/* line 282, ../scss/main.scss */
 .wrapper .bottom .errorList ul li p,
 .wrapper .bottom .errorList ul li h4 {
   line-height: 1.3;
   font-size: 1rem;
 }
-/* line 284, ../scss/main.scss */
+/* line 287, ../scss/main.scss */
 .wrapper .bottom .errorList ul li h4 {
   font-size: 1.2rem;
   margin-bottom: 0.75rem;
 }
-/* line 288, ../scss/main.scss */
+/* line 291, ../scss/main.scss */
 .wrapper .bottom .errorList ul li .icon,
 .wrapper .bottom .errorList ul li i {
   font-size: 2rem;
@@ -1892,11 +1864,11 @@ input.button {
   top: -13px;
   background-color: #c5c5c5;
 }
-/* line 298, ../scss/main.scss */
+/* line 301, ../scss/main.scss */
 .wrapper .bottom .errorList ul li.error .icon {
   color: #D23232;
 }
-/* line 303, ../scss/main.scss */
+/* line 306, ../scss/main.scss */
 .wrapper .bottom .errorList ul li.attention .icon {
   color: #EFC82B;
 }
