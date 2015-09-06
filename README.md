@@ -6,6 +6,7 @@
 * [Vue.js library for building interactive web interfaces](http://vuejs.org/)
 * [CSS with superpowers (SASS)](http://sass-lang.com/)
 * [Compass CSS Authoring Framework](http://compass-style.org/)
+* [pyalsacap](https://github.com/illwieckz/pyalsacap/blob/master/pyalsacap.py) and [alsacap](http://www.volkerschatz.com/noise/alsa.html)
 
 ## Sponsor
 
