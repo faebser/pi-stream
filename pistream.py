@@ -131,11 +131,18 @@ def start_stream():
     alsacap = subprocess.Popen('alsacap -R', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     output, error = alsacap.communicate()
 
+    print "output:"
+    print output
+    print "error:"
+    print error
+
     found_usb = False
     channels = None
     sampling_rate = None
     for line in output.splitlines():
         if found_usb and 'channels' in line and 'sampling rate' in line:
+            print "line:"
+            print line.strip()
             channels, sampling_rate = parse_card_info_string(line.strip())
             break
         if 'Card' in line and 'USB' in line:    # start capturing data
