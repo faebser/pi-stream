@@ -140,7 +140,7 @@ def start_stream():
     channels = None
     sampling_rate = None
     for line in output.splitlines():
-        if found_usb and 'channels' in line and 'sampling rate' in line:
+        if found_usb and 'channel' in line and 'sampling rate' in line:
             print "line:"
             print line.strip()
             channels, sampling_rate = parse_card_info_string(line.strip())
