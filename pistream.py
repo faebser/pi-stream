@@ -93,6 +93,7 @@ def parse_app_config(config_file):
         print u"Section {0} not found in pi_stream.ini file. Please check the file".format(u'pistream')
         return {}, [(TestStatus.Error, u"Section {0} not found in pi_stream.ini file. Please check the file".format(u'pistream'))]
 
+
 @get('/run-tests')
 def run_all_tests_http():
     global status
@@ -129,24 +130,32 @@ def start_stream():
 
     alsacap = subprocess.Popen('alsacap -R', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     output, error = alsacap.communicate()
-    print(output)
-    print(error)
-    card_info_string = ''
+
     found_usb = False
+    channels = None
+    sampling_rate = None
     for line in output.splitlines():
         if found_usb and 'channels' in line and 'sampling rate' in line:
-            card_info_string = line.strip()
+            channels, sampling_rate = parse_card_info_string(line.strip())
             break
         if 'Card' in line and 'USB' in line:    # start capturing data
             found_usb = True
 
-    print card_info_string
-    channels, sampling_rate = parse_card_info_string(card_info_string)
+    print channels
+    print sampling_rate
+
+    darkice_config['audio'].channel.value = max(channels)
+    darkice_config['audio'].sampleRate.value = max(sampling_rate)
 
     darkice_config['servers'][0].name.value = unicode(values['name'])
     darkice_config['servers'][0].genre.value = unicode(values['genre'])
     darkice_config['servers'][0].url.value = unicode(values['url'])
     darkice_config['servers'][0].description.value = unicode(values['description'])
+
+    print app_config['recording_folder']
+    print unicode(values['name'])
+
+    darkice_config['servers'][0].localDumpFile.value = path.join(app_config['recording_folder'], unicode(values['name'] + '.mp3'))
 
     try:
         with codecs.open('test.cfg', mode='wb', encoding='utf-8') as config_file:
@@ -176,10 +185,8 @@ def parse_card_info_string(info_string):
     sampling_rate = re.findall(test, sampling_rate)
     channels = re.findall(test, channels)
 
-    print sampling_rate
-    print channels
-
     return channels, sampling_rate
+
 
 @get('/stream')
 def get_stream_status():
