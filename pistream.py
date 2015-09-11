@@ -145,7 +145,7 @@ def start_stream():
             print line.strip()
             channels, sampling_rate = parse_card_info_string(line.strip())
             break
-        if 'Card' in line and 'USB' in line:    # start capturing data
+        if 'USB' in line:    # start capturing data
             found_usb = True
 
     print(channels)
