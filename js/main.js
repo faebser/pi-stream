@@ -40,6 +40,12 @@ var backendStore = (function ($, Vue, superagent, Plite) {
 			'title': title
 		}
 	},
+	updateStatusIntervall = function (timeout) {
+		window.setTimeout(function() {
+			module.getStreamStatus();
+			updateStatusIntervall(timeout);
+		}, timeout);
+	},
 	updateStatusList = function updateStatusList (response) {
 		module.statusList = response.body.filter(statusListFilter).map(statusListMap);
 		module.hasStatusItems = module.statusList.length !== 0;
@@ -52,6 +58,15 @@ var backendStore = (function ($, Vue, superagent, Plite) {
 	module.getStatus = function () {
 		var self = this;
 		superagent.get(urls.status)
+			.end(function (error, response) {
+				if(!Boolean(error)) {
+					updateStatusList(response);
+				}
+			});
+	},
+	module.getStreamStatus = function () {
+		superagent
+			.get(urls.stream)
 			.end(function (error, response) {
 				if(!Boolean(error)) {
 					updateStatusList(response);
@@ -74,6 +89,8 @@ var backendStore = (function ($, Vue, superagent, Plite) {
 				}
 				console.log(error);
 				console.log(response);
+				// update status
+				updateStatusIntervall(1000);
 			});
 
 		return promise;
