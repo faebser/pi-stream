@@ -158,7 +158,6 @@ class Icecast2(object):
     bitrateMode = Entry('bitrateMode')  # average bit rate
     format = Entry('format')    # format of the stream: ogg vorbis
     bitrate = Entry('bitrate')        # bitrate of the stream sent to the server
-    quality = Entry('quality')
     server = Entry('server')  # host name of the server
     port = Entry('port')       # port of the IceCast2 server, usually 8000
     password = Entry('password')    # source password to the IceCast2 server
