@@ -148,8 +148,8 @@ def start_stream():
         if 'Card' in line and 'USB' in line:    # start capturing data
             found_usb = True
 
-    print channels
-    print sampling_rate
+    print(channels)
+    print(sampling_rate)
 
     darkice_config['audio'].channel.value = max(channels)
     darkice_config['audio'].sampleRate.value = max(sampling_rate)
