@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-__author__ = 'faebser'
-
 from bottle import route, run, template, view, static_file, get, post, request, HTTPError, debug, TEMPLATE_PATH, response
 from os import linesep
 import subprocess
@@ -15,6 +13,10 @@ import codecs
 import select
 from threading import Thread
 from Queue import Queue, Empty
+import re
+
+
+__author__ = 'faebser'
 
 
 # Static Routes
@@ -125,6 +127,22 @@ def start_stream():
     global darkice_stdout_queue
     values = request.json
 
+    alsacap = subprocess.Popen('alsacap -R', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    output, error = alsacap.communicate()
+    print(output)
+    print(error)
+    card_info_string = ''
+    found_usb = False
+    for line in output.splitlines():
+        if found_usb and 'channels' in line and 'sampling rate' in line:
+            card_info_string = line.strip()
+            break
+        if 'Card' in line and 'USB' in line:    # start capturing data
+            found_usb = True
+
+    print card_info_string
+    channels, sampling_rate = parse_card_info_string(card_info_string)
+
     darkice_config['servers'][0].name.value = unicode(values['name'])
     darkice_config['servers'][0].genre.value = unicode(values['genre'])
     darkice_config['servers'][0].url.value = unicode(values['url'])
@@ -137,7 +155,7 @@ def start_stream():
             print filename
     except IOError as e:
         print("there is an error")
-        return {'error': 'File not availabe'}
+        return {'error': 'File not availabe: {}'.format(e)}
 
     darkice = subprocess.Popen('sudo darkice -c {}'.format(filename), stderr=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
 
@@ -151,6 +169,17 @@ def start_stream():
 
     return get_stream_status()
 
+
+def parse_card_info_string(info_string):
+    channels, sampling_rate = info_string.split(',')
+    test = re.compile(ur'(\d+)')
+    sampling_rate = re.findall(test, sampling_rate)
+    channels = re.findall(test, channels)
+
+    print sampling_rate
+    print channels
+
+    return channels, sampling_rate
 
 @get('/stream')
 def get_stream_status():
