@@ -170,7 +170,7 @@ class Icecast2(object):
     localDumpFile = Entry('localDumpFile')  # local dump file
     fileAddDate = Entry('fileAddDate')
 
-    property_tuple = (bitrateMode, format, bitrate, quality, server, port, password, mountPoint, name, description, url, genre, public, localDumpFile, fileAddDate)
+    property_tuple = (bitrateMode, format, bitrate, server, port, password, mountPoint, name, description, url, genre, public, localDumpFile, fileAddDate)
 
     section_name = 'icecast2-'
 
