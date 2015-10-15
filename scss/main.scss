@@ -117,6 +117,9 @@ body,
 		background-color: $bad-normal;
 		// @include border-radius(6px);
 		// @include box-shadow(0px 6px 0px $bad-dark);
+	}
+	&.disabled {
+		background-color: #6F7470;
 	}	
 }
 
@@ -310,3 +313,5 @@ input.button {
 		}
 	}
 }
+
+@import "navbar";

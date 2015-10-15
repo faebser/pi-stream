@@ -1,0 +1,24 @@
+@import "util";
+@import "compass/css3/box-shadow";
+@import "compass/css3/transition";
+
+.navBar {
+	background-color: rgb(197, 197, 197);
+	margin-bottom: 1rem;
+	line-height: 1.3;
+    font-size: 1rem;
+    padding: 0.65rem 1.3rem;
+    //@include box-shadow(0.4rem 0.45rem 0px 1px #111);
+    a {
+    	margin-right: 1.3rem;
+    	color: #34495e;
+    	@include transition(color 0.2s linear);
+    	&:visited,
+    	&:active {
+    		color: #34495e;
+    	}
+    	&:hover {
+    		color: #000;
+    	}
+    }
+}

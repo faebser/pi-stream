@@ -6,7 +6,10 @@ var backendStore = (function ($, Vue, superagent, Plite) {
 	var urls = {
 			'status': '/status',
 			'tests': '/run-tests',
-			'stream': '/stream'
+			'stream': '/stream',
+			'files': '/files',
+			'download': '/download',
+			'delete': '/delete'
 	},
 	icons = {
 			error: 'icon-cross_mark',
@@ -14,6 +17,7 @@ var backendStore = (function ($, Vue, superagent, Plite) {
 	},
 	module = {
 		statusList: [],
+		fileList: [],
 		hasStatusItems : false,
 		hasErrorItems: false
 	};
@@ -41,13 +45,20 @@ var backendStore = (function ($, Vue, superagent, Plite) {
 		}
 	},
 	updateStatusIntervall = function (timeout) {
-		window.setTimeout(function() {
-			module.getStreamStatus();
-			updateStatusIntervall(timeout);
-		}, timeout);
+		module.getStreamStatus()
+			.then(
+				function success () {
+					window.setTimeout(updateStatusIntervall, timeout);
+				}
+			)
+			.catch(
+				function error () {
+					console.error('error in darkice');
+				}
+			);
 	},
-	updateStatusList = function updateStatusList (response) {
-		module.statusList = response.body.filter(statusListFilter).map(statusListMap);
+	updateStatusList = function updateStatusList (messages) {
+		module.statusList = messages.filter(statusListFilter).map(statusListMap);
 		module.hasStatusItems = module.statusList.length !== 0;
 		module.hasErrorItems = module.statusList.filter(statusListErrorFilter).length !== 0;
 	};
@@ -60,18 +71,26 @@ var backendStore = (function ($, Vue, superagent, Plite) {
 		superagent.get(urls.status)
 			.end(function (error, response) {
 				if(!Boolean(error)) {
-					updateStatusList(response);
+					updateStatusList(response.body);
 				}
 			});
 	},
 	module.getStreamStatus = function () {
+		var p = new Plite();
+
 		superagent
 			.get(urls.stream)
 			.end(function (error, response) {
-				if(!Boolean(error)) {
-					updateStatusList(response);
+				if(!Boolean(error) && response.body.errors !== 0) {
+					updateStatusList(response.body.messages);
+					p.reject();
+				}
+				else {
+					p.resolve();
 				}
 			});
+
+		return p;
 	},
 	module.sendStreamFormData = function (formData) {
 		var serializedObject = JSON.stringify(formData);
@@ -90,7 +109,26 @@ var backendStore = (function ($, Vue, superagent, Plite) {
 				console.log(error);
 				console.log(response);
 				// update status
-				updateStatusIntervall(1000);
+				updateStatusIntervall(10000);
+			});
+
+		return promise;
+	},
+	module.getDownloadFiles = function () {
+		var promise = Plite();
+
+		superagent
+			.get(urls.files)
+			.end(function getResponse (error, response) {
+				if (error) {
+					promise.reject(error);
+				}
+				else {
+					console.log(response);
+					module.fileList = JSON.parse(response.text);
+					console.log(module.fileList);
+					promise.resolve();
+				}
 			});
 
 		return promise;
@@ -106,7 +144,7 @@ var backendStore = (function ($, Vue, superagent, Plite) {
 				}
 				else {
 					module.statusList = [];
-					updateStatusList(response);
+					updateStatusList(response.body);
 					promise.resolve();
 				}
 
@@ -250,6 +288,12 @@ var app = (function ($, Vue, superagent) {
 					_.forEach(state.formData, function validateForm (element) {
 						element.isValid = element.validator();
 					});
+					state.isFormValid = _.reduce(state.formData, function reduceForm (input, element) {
+						if(!element.isValid) {
+							return false;
+						} 
+						return input;
+					}, true);
 				}
 			},
 			created: function () {
@@ -265,7 +309,11 @@ var app = (function ($, Vue, superagent) {
 			template: $('#streamButtonTemplate').html(),
 			methods: {
 				runStream: function () {
-					this.state.store.sendStreamFormData(this.state.formData);
+					//if (this.state.isFormValid) { // TODO REMOVE THIS
+						this.state.store.sendStreamFormData(this.state.formData);
+					//}
+
+					return;
 				}
 			},
 			created: function () {
@@ -287,7 +335,9 @@ var app = (function ($, Vue, superagent) {
 								window.setTimeout(function () {
 									self.state.statusListLoading = false;
 								}, 500);
-							},
+							}
+						)
+						.catch(
 							function error (error) {
 								console.log(error);
 							}
@@ -297,10 +347,32 @@ var app = (function ($, Vue, superagent) {
 			template: $('#testButtonTemplate').html()
 		});
 
+		var downloadComponent = Vue.extend({
+			template: $('#downloadTemplate').html(),
+			data: {
+				state: state
+			},
+			methods: {
+				deleteFile: function deleteFile (filename) {
+
+				},
+				getFile: function getFile (filename) {
+
+				}
+			},
+			created: function created () {
+				state.store.getDownloadFiles()
+					.then(function () {
+						console.log(state.store.fileList);
+					})
+			}
+		});
+
 		Vue.component('error-list', errorListComponent);
 		Vue.component('stream-form', streamFormComponent);
 		Vue.component('stream-button', streamButtonComponent);
 		Vue.component('test-button', testButtonComponent);
+		Vue.component('download-list', downloadComponent);
 
 		var mainApp = new Vue({
 			el: '#app',
@@ -311,10 +383,13 @@ var app = (function ($, Vue, superagent) {
 				'errorList': errorListComponent,
 				'streamForm': streamFormComponent,
 				'streamButton': streamButtonComponent,
-				'testButton': testButtonComponent
+				'testButton': testButtonComponent,
+				'download': downloadComponent
 			},
 			methods: {
-
+				toggleDownloads: function (event) {
+					
+				}
 			},
 			created: function () {
 				console.log('main app init');

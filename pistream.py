@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-from bottle import route, run, template, view, static_file, get, post, request, HTTPError, debug, TEMPLATE_PATH, response, abort
+from bottle import run, template, static_file, get, post, request, HTTPError, debug, TEMPLATE_PATH, response, abort, delete
 from os import linesep
 import subprocess
 import time
 import json
 import config
-from os import path
+from os import path, listdir
 from configparser import NoOptionError, NoSectionError, ConfigParser
 #import sections
 from startup_tests.test_manager import run_all_tests, TestStatus
@@ -39,6 +39,10 @@ def fonts(filename):
 def images(filename):
     return static_file(filename, root='img')
 
+
+@get('/download/<filename:re:.*\.(mp3)>')
+def download_recording(filename):
+    return static_file(filename, root=app_config['recording_folder'])
 # testing
 # real stuff down here
 # by now the config and all the sections should be imported
@@ -153,8 +157,9 @@ def start_stream():
     print(channels)
     print(sampling_rate)
 
-    darkice_config['audio'].channel.value = max(channels)
-    darkice_config['audio'].sampleRate.value = max(sampling_rate)
+    if channels and sampling_rate:
+        darkice_config['audio'].channel.value = max(channels)  # todo fix this max/min
+        darkice_config['audio'].sampleRate.value = max(sampling_rate)  # todo fix this max/min
 
     darkice_config['servers'][0].name.value = unicode(values['name'])
     darkice_config['servers'][0].genre.value = unicode(values['genre'])
@@ -245,6 +250,21 @@ def parse_errors(error):
             'status': TestStatus.Error.name.lower()
         }
 
+
+@get('/files')
+def return_files():
+    global app_config
+    files = listdir(app_config['recording_folder'])
+    print files
+    # get all files from path
+    # send id, name
+    return json.dumps(files)
+
+
+@delete('/delete/<filename>')
+def delete_file(filename):
+
+    pass
 
 @get('/')
 def index():
