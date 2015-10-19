@@ -21,6 +21,14 @@ class LcdDisplay(object):
         else:
             pass
 
+    def info(self, info):
+        self.set_color(1.0, 1.0, 0)
+        self.message(info)
+
+    def error(self, error):
+        self.set_color(1.0, 0, 0)
+        self.message(error)
+
     def message(self, message):
         if self.display is not None:
             self.display.clear()

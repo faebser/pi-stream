@@ -64,11 +64,11 @@ lcd_display = display.LcdDisplay()
 def init():
     global status, app_config, darkice_config
 
-    lcd_display.message("...")
-    lcd_display.message("server starting up")
+    lcd_display.info("...")
+    lcd_display.info("server starting up")
     status = []
 
-    lcd_display.message("loading config file")
+    lcd_display.info("loading config file")
     app_config_file = open(path.join('config', 'pi_stream.ini'))
     app_config.clear()
     app_config, app_config_parser_errors = parse_app_config(app_config_file)
@@ -78,7 +78,7 @@ def init():
         status.append(app_config_parser_errors)
 
     if len(app_config) != 0:  # no errors
-        lcd_display.message("loading default/optimal darkice config")
+        lcd_display.info("loading default/optimal darkice config")
         darkice_config_file = open(app_config['defaultConfig'])
         darkice_config, darkice_config_parser_errors = config.init_config(darkice_config_file)
         darkice_config_file.close()
@@ -86,8 +86,10 @@ def init():
         if len(darkice_config_parser_errors) != 0:
             status.append(darkice_config_parser_errors)
 
-    lcd_display.message("running status test")
+    lcd_display.info("running status test")
     status = run_all_tests()
+    lcd_display.set_color(0, 1.0, 0)
+    lcd_display.message('I am ready')
 
 
 def parse_app_config(config_file):
