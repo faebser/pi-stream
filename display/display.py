@@ -8,6 +8,7 @@ mutex = Lock()
 
 def lcd_thread(display, lcd_queue, reset_queue):
     messages_list = []
+    index = 0
     while True:
         sleep(5)
         print('i slept for 5 second')
@@ -17,7 +18,10 @@ def lcd_thread(display, lcd_queue, reset_queue):
         if lcd_queue.empty() != True:
             messages_list.append(lcd_queue.get_nowait())
         if len(messages_list) != 0:
-            display.message(messages_list[0])
+            display.message(messages_list[index])
+            index = index + 1
+            if index == len(messages_list):
+                index = 0
 
 
 class LcdDisplay(object):
@@ -27,7 +31,7 @@ class LcdDisplay(object):
             import Adafruit_CharLCD
             self.display = Adafruit_CharLCD.Adafruit_CharLCDPlate()
             self.reset_queue = Queue()
-            process = Process(target=lcd_thread, args=(self, lcd_queue))
+            process = Process(target=lcd_thread, args=(self, lcd_queue, self.reset_queue))
             process.start()
         except Exception, e:
             print('No LCD Display available')
