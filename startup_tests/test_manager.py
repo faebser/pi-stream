@@ -44,9 +44,10 @@ add_test(u'usb_audio', UsbAudioTest())
 def run_all_tests():
     status = list()
     for name, test in test_manager.iteritems():
-        result, message = test.run_test()
+        result, message, lcd = test.run_test()
         status.append({
             "result": result,
-            "message": message
+            "message": message,
+            "lcd_message": lcd
         })
     return sorted(status, key=lambda item: item['result'].value)
