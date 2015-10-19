@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from bottle import run, template, static_file, get, post, request, HTTPError, debug, TEMPLATE_PATH, response, abort, delete
+from display import display
 from os import linesep
 import subprocess
 import time
@@ -42,13 +43,13 @@ def images(filename):
 
 @get('/download/<filename:re:.*\.(mp3)>')
 def download_recording(filename):
-    return static_file(filename, root=app_config['recording_folder'])
+    return static_file(filename, root=app_config['recording_folder'], download=True)
 # testing
 # real stuff down here
 # by now the config and all the sections should be imported
 
 
-# global
+# globals
 
 status = list()
 app_config = dict()
@@ -57,16 +58,17 @@ json_content_type = 'application/json'
 darkice = None
 darkice_stdout_queue = Queue()
 darkice_stderr_queue = Queue()
+lcd_display = display.LcdDisplay()
 
 
 def init():
     global status, app_config, darkice_config
 
-    print("...")
-    print("server starting up")
+    lcd_display.message("...")
+    lcd_display.message("server starting up")
     status = []
 
-    print("loading config file")
+    lcd_display.message("loading config file")
     app_config_file = open(path.join('config', 'pi_stream.ini'))
     app_config.clear()
     app_config, app_config_parser_errors = parse_app_config(app_config_file)
@@ -76,7 +78,7 @@ def init():
         status.append(app_config_parser_errors)
 
     if len(app_config) != 0:  # no errors
-        print("loading default/optimal darkice config")
+        lcd_display.message("loading default/optimal darkice config")
         darkice_config_file = open(app_config['defaultConfig'])
         darkice_config, darkice_config_parser_errors = config.init_config(darkice_config_file)
         darkice_config_file.close()
@@ -84,7 +86,7 @@ def init():
         if len(darkice_config_parser_errors) != 0:
             status.append(darkice_config_parser_errors)
 
-    print("running status test")
+    lcd_display.message("running status test")
     status = run_all_tests()
 
 
