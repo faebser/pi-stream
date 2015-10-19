@@ -1,23 +1,55 @@
+from multiprocessing import Process, Queue, Lock
+from time import sleep
 __author__ = 'faebser'
+
+# mutex
+mutex = Lock()
+
+
+def lcd_thread(display, lcd_queue, reset_queue):
+    messages_list = []
+    while True:
+        sleep(5)
+        print('i slept for 5 second')
+        if reset_queue.empty() != True:
+            print(reset_queue.get_nowait())
+            messages_list = []
+        if lcd_queue.empty() != True:
+            messages_list.append(lcd_queue.get_nowait())
+        if len(messages_list) != 0:
+            display.message(messages_list[0])
 
 
 class LcdDisplay(object):
-    try:
-        import Adafruit_CharLCD
-        display = Adafruit_CharLCD.Adafruit_CharLCDPlate()
-    except Exception, e:
-        print('No LCD Display available')
-        display = None
+
+    def __init__(self, lcd_queue):
+        try:
+            import Adafruit_CharLCD
+            self.display = Adafruit_CharLCD.Adafruit_CharLCDPlate()
+            self.reset_queue = Queue()
+            process = Process(target=lcd_thread, args=(self, lcd_queue))
+            process.start()
+        except Exception, e:
+            print('No LCD Display available')
+            self.reset_queue = Queue()
+            self.display = None
+            process = Process(target=lcd_thread, args=(self, lcd_queue, self.reset_queue))
+            process.start()
+
+    def reset(self):
+        self.reset_queue.put('reset')
 
     def set_color(self, r, g, b):
         if self.display is not None:
-            self.display.set_color(r, g, b)
+            with mutex:
+                self.display.set_color(r, g, b)
         else:
             pass
 
     def clear(self):
         if self.display is not None:
-            self.display.clear()
+            with mutex:
+                self.display.clear()
         else:
             pass
 
@@ -31,7 +63,8 @@ class LcdDisplay(object):
 
     def message(self, message):
         if self.display is not None:
-            self.display.clear()
-            self.display.message(message)
+            with mutex:
+                self.display.clear()
+                self.display.message(message)
         else:
             print(message)

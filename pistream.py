@@ -3,6 +3,7 @@ from bottle import run, template, static_file, get, post, request, HTTPError, de
 from display import display
 from os import linesep
 import subprocess
+from multiprocessing import Queue as MpQueue
 import time
 import json
 import config
@@ -58,15 +59,18 @@ json_content_type = 'application/json'
 darkice = None
 darkice_stdout_queue = Queue()
 darkice_stderr_queue = Queue()
-lcd_display = display.LcdDisplay()
+lcd_display_queue = MpQueue()
+lcd_display = display.LcdDisplay(lcd_display_queue)
 
 
 def init():
-    global status, app_config, darkice_config
+    global status, app_config, darkice_config, lcd_display_queue
 
     lcd_display.info("...............\n................")
     lcd_display.info("server\nstarting up")
     status = []
+
+    lcd_display_queue.put('loading\nconfig file')
 
     lcd_display.info("loading\nconfig file")
     app_config_file = open(path.join('config', 'pi_stream.ini'))
@@ -86,7 +90,7 @@ def init():
         if len(darkice_config_parser_errors) != 0:
             status.append(darkice_config_parser_errors)
 
-    lcd_display.info("running\n status test")
+    lcd_display.info("running\nstatus tests")
     status = run_all_tests()
     lcd_display.set_color(0, 1.0, 0)
     lcd_display.message('I am ready')
