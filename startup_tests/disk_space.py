@@ -10,9 +10,14 @@ class DiskSpaceTest(TestClass):
     def run_test(self):
         st = os.statvfs('/')  # root file system
         result = st.f_bavail * st.f_frsize/1024/1024
-        if result < 1000:
-            return TestStatus.Attention, u'There are {} MB available. Please free up some space.'.format(result)
-        elif result < 10:
-            return TestStatus.Error, u'There are only {} MB available. Please free up some space.'.format(result)
+        minutes = result
+        if result <= 999:
+            return TestStatus.Attention, \
+                   u'There are {} MB available. That is enough for {} minutes of MP3'.format(result, minutes), \
+                   u"{} MB left\n{} min left".format(result, minutes)
+        elif result <= 99:
+            return TestStatus.Error, \
+                   u'There are only {} MB available, that is just {} minutes of MP*. Please free up some space.'.format(result), \
+                   u"Critical only\n{}MB {}min left".format(result, minutes)
         else:
-            return TestStatus.Good, u'There are {} MB of free space available.'.format(result)
+            return TestStatus.Good, u'There are {} MB of free space available.'.format(result), u""
