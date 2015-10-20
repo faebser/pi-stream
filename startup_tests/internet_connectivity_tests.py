@@ -43,7 +43,7 @@ class PingSwitchTest(TestClass):
                    u"I could not reach switch.ch after {} seconds of trying. Please make sure that I'm connected to the internet".format(self.timeout), \
                    u"Timeout after {}s\nto switch.ch".format(self.timeout)
         else:
-            return TestStatus.Good, u'I pinged switch.ch'
+            return TestStatus.Good, u'I pinged switch.ch', u''
 
 
 class PingStreamServerTest(TestClass):
@@ -65,4 +65,4 @@ class PingStreamServerTest(TestClass):
                        u"I could not reach streaming server after {} seconds of trying. Please make sure that I'm connected to the internet".format(self.timeout), \
                        u"Timeout after {}s\nto stream server".format(self.timeout)
             else:
-                return TestStatus.Good, 'I pinged {}'.format(self.ip)
+                return TestStatus.Good, 'I pinged {}'.format(self.ip), u''
