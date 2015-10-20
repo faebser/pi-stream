@@ -15,6 +15,9 @@ import select
 from threading import Thread
 from Queue import Queue, Empty
 import re
+import socket
+import fcntl
+import struct
 
 
 __author__ = 'faebser'
@@ -60,6 +63,13 @@ darkice_stdout_queue = Queue()
 darkice_stderr_queue = Queue()
 lcd_display = display.LcdDisplay()
 
+def get_ip_address(ifname):
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    return socket.inet_ntoa(fcntl.ioctl(
+        s.fileno(),
+        0x8915,  # SIOCGIFADDR
+        struct.pack('256s', ifname[:15])
+    )[20:24])
 
 def init():
     global status, app_config, darkice_config
@@ -88,18 +98,19 @@ def init():
 
     lcd_display.info("running\nstatus tests")
     status = run_all_tests()
-    all_good = True
+    lcd_display.start_process()
+    try:
+        ip_address = get_ip_address('eth0')
+        lcd_display.put(u"Reach me at\n{}".format(ip_address), lcd_display.GOOD)
+    except Exception, e:
+        pass # dont do anything, there will be an error in the queue anyway
     for item in status:
         if item['result'] is TestStatus.Error:
             lcd_display.put(item['lcd_message'], lcd_display.ERROR)
-            all_good = False
         if item['result'] is TestStatus.Attention:
             lcd_display.put(item['lcd_message'], lcd_display.INFO)
-            all_good = False
         pass
-    if all_good:
-        lcd_display.set_color(0, 1.0, 0)
-        lcd_display.message('I am ready')
+
 
 
 def parse_app_config(config_file):

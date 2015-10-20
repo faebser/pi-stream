@@ -37,15 +37,16 @@ class LcdDisplay(object):
             self.display = Adafruit_CharLCD.Adafruit_CharLCDPlate()
             self.lcd_queue = Queue()
             self.reset_queue = Queue()
-            process = Process(target=lcd_thread, args=(self, self.lcd_queue, self.reset_queue))
-            process.start()
+
         except Exception, e:
             print('No LCD Display available')
             self.reset_queue = Queue()
             self.lcd_queue = Queue()
             self.display = None
-            process = Process(target=lcd_thread, args=(self, self.lcd_queue, self.reset_queue))
-            process.start()
+
+    def start_process(self):
+        process = Process(target=lcd_thread, args=(self, self.lcd_queue, self.reset_queue))
+        process.start()
 
     def put(self, message, message_type=(0.1, 0.1, 1)):
         self.lcd_queue.put({'type': message_type, 'message': message})
