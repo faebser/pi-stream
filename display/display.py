@@ -12,35 +12,45 @@ def lcd_thread(display, lcd_queue, reset_queue):
     while True:
         sleep(5)
         print('i slept for 5 second')
-        if reset_queue.empty() != True:
-            print(reset_queue.get_nowait())
-            messages_list = []
-        if lcd_queue.empty() != True:
+        if reset_queue.empty() is False:
+            messages_list = [] 
+        if lcd_queue.empty() is False:
             messages_list.append(lcd_queue.get_nowait())
         if len(messages_list) != 0:
-            display.message(messages_list[index])
-            index = index + 1
+            r, g, b = messages_list[index]['message_type']
+            display.set_color(r, g, b)
+            display.message(messages_list[index]['message'])
+            index += 1
             if index == len(messages_list):
                 index = 0
 
 
 class LcdDisplay(object):
 
-    def __init__(self, lcd_queue):
+    def __init__(self):
+        self.INFO = (1.0, 1.0, 0)
+        self.ERROR = (1.0, 0, 0)
+        self.GOOD = (0, 0.1, 0)
+
         try:
             import Adafruit_CharLCD
             self.display = Adafruit_CharLCD.Adafruit_CharLCDPlate()
+            self.lcd_queue = Queue()
             self.reset_queue = Queue()
-            process = Process(target=lcd_thread, args=(self, lcd_queue, self.reset_queue))
+            process = Process(target=lcd_thread, args=(self, self.lcd_queue, self.reset_queue))
             process.start()
         except Exception, e:
             print('No LCD Display available')
             self.reset_queue = Queue()
+            self.lcd_queue = Queue()
             self.display = None
-            process = Process(target=lcd_thread, args=(self, lcd_queue, self.reset_queue))
+            process = Process(target=lcd_thread, args=(self, self.lcd_queue, self.reset_queue))
             process.start()
 
-    def reset(self):
+    def put(self, message, message_type=(0.1, 0.1, 1)):
+        self.lcd_queue.put({'type': message_type, 'message': message})
+
+    def reset_queue(self):
         self.reset_queue.put('reset')
 
     def set_color(self, r, g, b):

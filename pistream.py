@@ -60,7 +60,7 @@ darkice = None
 darkice_stdout_queue = Queue()
 darkice_stderr_queue = Queue()
 lcd_display_queue = MpQueue()
-lcd_display = display.LcdDisplay(lcd_display_queue)
+lcd_display = display.LcdDisplay()
 
 
 def init():
