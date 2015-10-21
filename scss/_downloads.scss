@@ -1,0 +1,22 @@
+.downloads {
+	li {
+		padding: 0.25rem 0;
+		span {
+			font-size: 1.1rem;
+			&.red {
+				color: $bad-normal;
+			}
+		}
+		a {
+			font-size: 1.1rem;
+			padding-left: 0.5rem;
+			display: inline-block;
+			height: 100%;
+			&,
+			&:active,
+			&:visited {
+				color: $font-normal;
+			}
+		}
+	}
+}

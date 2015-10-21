@@ -126,9 +126,10 @@
         </div>
         <div class="box">
           <div class="innerBox">
-            <ul class="innerGradientBox">
+            <ul class="innerGradientBox downloads">
               <li v-repeat="state.store.fileList">
-                  <span class="icon icon-download"></span><a class="" href="download/{{ $value }}" target="_blank">{{ $value }}</a>
+                <span class="icon icon-cross_mark" v-class="red: confirmations[$value]" v-on="click: deleteFile($value)"></span>
+                  <a class="" href="download/{{ $value }}" target="_blank">{{ $value }} {{ confirmations[$value] }}</a>
               </li>
             </ul>
           </div>

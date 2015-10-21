@@ -74,7 +74,7 @@ def get_ip_address(ifname):
 def init():
     global status, app_config, darkice_config
 
-    lcd_display.info("...............\n................")
+    lcd_display.info("...............\n...............")
     lcd_display.info("server\nstarting up")
     status = []
 
@@ -110,7 +110,6 @@ def init():
         if item['result'] is TestStatus.Attention:
             lcd_display.put(item['lcd_message'], lcd_display.INFO)
         pass
-
 
 
 def parse_app_config(config_file):
@@ -249,9 +248,6 @@ def get_stream_status():
         print('no error yet')
     else:
         print errors
-
-    print lines
-    print errors
 
     errors_from_lines = filter(None, [parse_lines_for_error(line) for line in lines.split(linesep)])
     error_messages = filter(None, [parse_errors(error) for error in errors.split(linesep)])

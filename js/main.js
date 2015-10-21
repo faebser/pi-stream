@@ -1,3 +1,5 @@
+Vue.config.debug = true;
+
 // build a store that connets the state to the backend
 var backendStore = (function ($, Vue, superagent, Plite) {
 	// javascript module pattern
@@ -252,7 +254,7 @@ var app = (function ($, Vue, superagent) {
 		// js pass by ref should be able to update the state inside the components
 
 		var errorListComponent = Vue.extend({
-			'data': {
+			data: {
 				state: state
 			},
 			'template': $('#errorListTemplate').html(),
@@ -264,6 +266,7 @@ var app = (function ($, Vue, superagent) {
 			},
 			created: function () {
 				console.log('i raise master');
+				console.log(this.state);
 			}
 		});
 
@@ -350,21 +353,30 @@ var app = (function ($, Vue, superagent) {
 		var downloadComponent = Vue.extend({
 			template: $('#downloadTemplate').html(),
 			data: {
-				state: state
+				state: state,
+				confirmations: {}
 			},
 			methods: {
 				deleteFile: function deleteFile (filename) {
-
-				},
-				getFile: function getFile (filename) {
-
+					console.log(filename);
+					if(this.confirmations[filename] === false) {
+						console.log(this.confirmations);
+						this.confirmations[filename] = true;
+						return;
+					}
 				}
 			},
 			created: function created () {
+				'use strict';
+				var self = this;
+
 				state.store.getDownloadFiles()
 					.then(function () {
-						console.log(state.store.fileList);
-					})
+						for (var i = state.store.fileList.length - 1; i >= 0; i--) {
+							self.confirmations.$add(state.store.fileList[i], false);
+						};
+					});
+				
 			}
 		});
 

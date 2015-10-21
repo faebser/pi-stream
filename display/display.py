@@ -10,12 +10,11 @@ def lcd_thread(display, lcd_queue, reset_queue):
     messages_list = []
     index = 0
     while True:
-        sleep(5)
-        print('i slept for 5 second')
+        while lcd_queue.empty() is False:
+            messages_list.append(lcd_queue.get_nowait())
+        sleep(4)
         if reset_queue.empty() is False:
             messages_list = []
-        if lcd_queue.empty() is False:
-            messages_list.append(lcd_queue.get_nowait())
         if len(messages_list) != 0:
             r, g, b = messages_list[index]['type']
             display.set_color(r, g, b)
