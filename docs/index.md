@@ -8,7 +8,7 @@ einfach zu bedienenden Stream- und Aufnahmestation zu machen.
 
 (Sponsor Info hinzfügen)
 
-# How To
+# Zusammenbau
 
 Wir empfehlen die Nutzung eines LCD-Displays, da dies für die Ausgabe der aktuellen IP-Adresse genutzt wird. Die IP-Adresse des Raspi kann jedoch auch über andere Wege ermittelt werden.
 
@@ -24,19 +24,22 @@ Für unsere Version haben wir ein Gehaeuse gebaut um den Rechner und die Kompone
 
 ## LCD-Display
 
-Wir haben (dieses 16x2 LCD Kit von adafruit.com)[https://adafruit.com/shop/123] verbaut.
+Wir haben [dieses 16x2 LCD Kit von adafruit.com](http://www.adafruit.com/products/1110) verbaut.
 
-## Gehaeuse
+## Gehäuse
 
 * Abstandshalter einbauen
-    Ich habe ein Stück Holz mit der ungefaehren Grösse des Rechners augeschnitten und in das Gehause geklebt.
+    
+Ich habe ein Stück Holz mit der ungefähren Grösse des Rechners augeschnitten und in das Gehäuse geklebt.
 
 ![Raspi Gehaese Spacer](images/IMG_20150911_155047.jpg) 
 ![Raspi kleben](images/IMG_20150911_155513.jpg)
 
-* Löcher in Behaelter schneiden
-    Die Grösse der Anschlüsse abmessen, diese auf dem Gehaeuse markieren
-    und auschneiden.
+
+* Löcher in Behälter schneiden
+    
+Die Grösse der Anschlüsse abmessen, diese auf dem Gehäuse markieren
+und auschneiden.
 
 ![Raspi Löcher schneiden](images/IMG_20150911_170557.jpg)
     
@@ -49,11 +52,11 @@ Wir haben (dieses 16x2 LCD Kit von adafruit.com)[https://adafruit.com/shop/123] 
 
 * Rechner befestigen
     Den Rechner auf dem Abstandhalter befestigen. Die Kabel von aussen
-    in das Gehaeuse schieben und anschliessen.
+    in das Gehäuse schieben und anschliessen.
 
 ![Raspi fertig](images/IMG_20150911_181422.jpg)
 
+<hr>
 
+# Inbetriebnahme
 
-
-# Manual
