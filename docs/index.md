@@ -50,11 +50,5 @@ und auschneiden.
 
 ![Raspi fertig](images/IMG_20150911_181422.jpg)
 
-<hr>
-
-# Inbetriebnahme
-
-![Raspi nicht eingesteckt](images/manual/IMG_20151022_230405.jpg)
-
 
 
