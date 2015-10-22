@@ -12,7 +12,7 @@ def lcd_thread(display, lcd_queue, reset_queue):
     while True:
         while lcd_queue.empty() is False:
             messages_list.append(lcd_queue.get_nowait())
-        sleep(4)
+        sleep(12)
         if reset_queue.empty() is False:
             messages_list = []
         if len(messages_list) != 0:
@@ -26,10 +26,11 @@ def lcd_thread(display, lcd_queue, reset_queue):
 
 class LcdDisplay(object):
 
-    def __init__(self):
+    def __init__(self, seconds):
         self.INFO = (1.0, 1.0, 0)
         self.ERROR = (1.0, 0, 0)
         self.GOOD = (0, 0.1, 0)
+        self.seconds = seconds
 
         try:
             import Adafruit_CharLCD

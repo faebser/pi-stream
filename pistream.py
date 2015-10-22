@@ -63,6 +63,7 @@ darkice_stdout_queue = Queue()
 darkice_stderr_queue = Queue()
 lcd_display = display.LcdDisplay()
 
+
 def get_ip_address(ifname):
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     return socket.inet_ntoa(fcntl.ioctl(
@@ -70,6 +71,7 @@ def get_ip_address(ifname):
         0x8915,  # SIOCGIFADDR
         struct.pack('256s', ifname[:15])
     )[20:24])
+
 
 def init():
     global status, app_config, darkice_config
