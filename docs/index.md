@@ -16,12 +16,6 @@ Für unsere Version haben wir ein Gehaeuse gebaut um den Rechner und die Kompone
 
 ![raspi fertig](images/IMG_20150911_181422.jpg)
 
-* Angepasstes Raspian Image herunter laden
-* LCD hinzufügen
-* Raspi an Strom anhaengen
-* IP-Adresse ablesen
-* Website aufrufen
-
 ## LCD-Display
 
 Wir haben [dieses 16x2 LCD Kit von adafruit.com](http://www.adafruit.com/products/1110) verbaut.
