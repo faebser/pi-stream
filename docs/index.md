@@ -10,9 +10,9 @@ einfach zu bedienenden Stream- und Aufnahmestation zu machen.
 
 # Zusammenbau
 
-Wir empfehlen die Nutzung eines LCD-Displays, da dies für die Ausgabe der aktuellen IP-Adresse genutzt wird. Die IP-Adresse des Raspi kann jedoch auch über andere Wege ermittelt werden.
+Wir empfehlen die Nutzung eines LCD-Displays, da dies für die Ausgabe der aktuellen IP-Adresse genutzt wird. Die IP-Adresse des Rechners kann jedoch auch über andere Wege ermittelt werden.
 
-Für unsere Version haben wir ein Gehaeuse gebaut um den Rechner und die Komponenten zu schützen.
+Für unsere Version haben wir ein Gehäuse gebaut um den Rechner und die Komponenten zu schützen.
 
 ![raspi fertig](images/IMG_20150911_181422.jpg)
 
@@ -53,4 +53,8 @@ und auschneiden.
 <hr>
 
 # Inbetriebnahme
+
+![Raspi nicht eingesteckt](images/manual/IMG_20151022_230405.jpg)
+
+
 
