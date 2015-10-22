@@ -26,11 +26,10 @@ def lcd_thread(display, lcd_queue, reset_queue):
 
 class LcdDisplay(object):
 
-    def __init__(self, seconds):
+    def __init__(self):
         self.INFO = (1.0, 1.0, 0)
         self.ERROR = (1.0, 0, 0)
         self.GOOD = (0, 0.1, 0)
-        self.seconds = seconds
 
         try:
             import Adafruit_CharLCD
