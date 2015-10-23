@@ -42,4 +42,6 @@ Vor Inbetriebnahme alle Kabel ausstecken.
 ![tests](images/manual/IMG_20151023_000826.jpg)
 ![error](images/manual/IMG_20151023_002215.jpg)
 
+# Zur [Benutzeroberfläche](https://github.com/faebser/pi-stream/blob/master/docs/software.md)
+
 

@@ -52,7 +52,7 @@ in das Gehäuse schieben und anschliessen.
 
 ![Raspi fertig](images/IMG_20150911_181422.jpg)
 
-zur [Inbetriebnahme](https://github.com/faebser/pi-stream/blob/master/docs/manual.md)
+# zur [Inbetriebnahme](https://github.com/faebser/pi-stream/blob/master/docs/manual.md)
 
 
 
