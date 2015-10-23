@@ -38,17 +38,21 @@ und auschneiden.
 ![Raspi Löcher schneiden](images/IMG_20150911_170557.jpg)
     
 * Abdeckungen für Löcher zuschneiden
-    Um den Rechner und das Display zu schützen, Abdeckungen für die Kabel
-    zuschneiden und sie aussen auf das Gehauses kleben.
+
+Um den Rechner und das Display zu schützen, Abdeckungen für die Kabel
+zuschneiden und sie aussen auf das Gehauses kleben.
 
 ![Raspi lasercutter](images/IMG_20150911_173845.jpg)
 ![Raspi kleben abdeckungen](images/IMG_20150911_180205.jpg)
 
 * Rechner befestigen
-    Den Rechner auf dem Abstandhalter befestigen. Die Kabel von aussen
-    in das Gehäuse schieben und anschliessen.
+    
+Den Rechner auf dem Abstandhalter befestigen. Die Kabel von aussen
+in das Gehäuse schieben und anschliessen.
 
 ![Raspi fertig](images/IMG_20150911_181422.jpg)
+
+zur [Inbetriebnahme](https://github.com/faebser/pi-stream/blob/master/docs/manual.md)
 
 
 

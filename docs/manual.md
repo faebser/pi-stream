@@ -24,4 +24,22 @@ Vor Inbetriebnahme alle Kabel ausstecken.
 
 ![gif](images/manual/startup.gif)
 
+* Die Software benötigt einen kurzen Augenblick um alle Status-Tests durchzuführen.
+
+![tests](images/manual/IMG_20151023_000826.jpg)
+
+* Falls alle Tests ohne Probleme ausgeführt wurden, erscheint die Meldung mit der IP-Adresse des Rechners auf dem LCD-Display.
+
+![ip](images/manual/IMG_20151023_001753.jpg)
+
+* Anschliessend zeigt das LCD die Status-Meldungen der Software an. Es gibt drei verschiedene Arten von Meldungen:
+    * **grüner Hintergrundfarbe**: Alles gut (z.B. IP-Adresse, Streaming)
+    * **gelber Hintergrundfarbe**: Achtung, evtl ein Problem (z.B. Speicherplatz wird knapp, Soundkarte nicht erkannt)
+    * **roter Hintergrundfarbe**: kritischer Fehler (z.B. keine Netzwerkverbindung, keine Verbindung zum Server)
+
+
+![ip](images/manual/IMG_20151023_001753.jpg)
+![tests](images/manual/IMG_20151023_000826.jpg)
+![error](images/manual/IMG_20151023_002215.jpg)
+
 
