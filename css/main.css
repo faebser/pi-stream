@@ -1375,24 +1375,29 @@ input.button {
 /* line 2, ../scss/_downloads.scss */
 .downloads li {
   padding: 0.25rem 0;
+  display: table;
 }
-/* line 4, ../scss/_downloads.scss */
+/* line 5, ../scss/_downloads.scss */
 .downloads li span {
+  width: 5%;
   font-size: 1.1rem;
   cursor: pointer;
+  display: table-cell;
+  vertical-align: middle;
 }
-/* line 7, ../scss/_downloads.scss */
+/* line 11, ../scss/_downloads.scss */
 .downloads li span.red {
   color: #D23232;
 }
-/* line 11, ../scss/_downloads.scss */
+/* line 15, ../scss/_downloads.scss */
 .downloads li a {
   font-size: 1.1rem;
   padding-left: 0.5rem;
   display: inline-block;
   height: 100%;
+  width: 90%;
 }
-/* line 16, ../scss/_downloads.scss */
+/* line 21, ../scss/_downloads.scss */
 .downloads li a, .downloads li a:active, .downloads li a:visited {
   color: #34495e;
 }

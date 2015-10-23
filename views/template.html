@@ -107,9 +107,7 @@
       </div>
 
       <div id="streamButtonTemplate">
-        <!-- {{ !state.isFormValid }}
-        v-class="disabled: !state.isFormInValid" -->
-        <a class="button good" v-on="click: runStream">
+        <a class="button good" v-class="disabled: !state.isFormInValid" v-on="click: runStream">
           <span v-class="spanClass" v-text="spanText"></span> {{ 'Stream'|uppercase }}
         </a>
       </div>
@@ -129,7 +127,7 @@
             <ul class="innerGradientBox downloads">
               <li v-repeat="state.store.fileList">
                 <span class="icon icon-cross_mark" v-class="red: confirmations[$value]" v-on="click: deleteFile($value)"></span>
-                  <a class="" href="download/{{ $value }}" target="_blank">{{ $value }} {{ confirmations[$value] }}</a>
+                  <a data-bla="confirmations[$value]" class="" href="download/{{ $value }}" target="_blank">{{ $value }}</a>
               </li>
             </ul>
           </div>

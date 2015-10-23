@@ -100,7 +100,6 @@ def init():
             status.append(darkice_config_parser_errors)
 
     lcd_display.info("running\nstatus tests")
-    sleep(15)
     status = run_all_tests()
     lcd_display.start_process()
     try:

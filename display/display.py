@@ -12,7 +12,7 @@ def lcd_thread(display, lcd_queue, reset_queue):
     while True:
         while lcd_queue.empty() is False:
             messages_list.append(lcd_queue.get_nowait())
-        sleep(12)
+        sleep(4)
         if reset_queue.empty() is False:
             messages_list = []
         if len(messages_list) != 0:

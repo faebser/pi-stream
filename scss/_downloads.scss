@@ -1,9 +1,13 @@
 .downloads {
 	li {
 		padding: 0.25rem 0;
+		display: table;
 		span {
+			width: 5%;
 			font-size: 1.1rem;
 			cursor: pointer;
+			display: table-cell;
+  			vertical-align: middle;
 			&.red {
 				color: $bad-normal;
 			}
@@ -13,6 +17,7 @@
 			padding-left: 0.5rem;
 			display: inline-block;
 			height: 100%;
+			width: 90%;
 			&,
 			&:active,
 			&:visited {
