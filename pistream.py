@@ -6,7 +6,7 @@ import subprocess
 import time
 import json
 import config
-from os import path, listdir
+from os import path, listdir, remove
 from configparser import NoOptionError, NoSectionError, ConfigParser
 #import sections
 from startup_tests.test_manager import run_all_tests, TestStatus
@@ -48,10 +48,6 @@ def images(filename):
 @get('/download/<filename:re:.*\.(mp3)>')
 def download_recording(filename):
     return static_file(filename, root=app_config['recording_folder'], download=True)
-# testing
-# real stuff down here
-# by now the config and all the sections should be imported
-
 
 # globals
 
@@ -285,10 +281,15 @@ def return_files():
     return json.dumps(files)
 
 
-@delete('/delete/<filename>')
+@delete('/download/<filename:re:.*\.(mp3)>')
 def delete_file(filename):
+    path_to_delete = path.join(path.abspath('.'), app_config['recording_folder'], filename)
+    try:
+        remove(path_to_delete)
+    except Exception, e:
+        pass
+    return
 
-    pass
 
 @get('/')
 def index():

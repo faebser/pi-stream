@@ -10,8 +10,7 @@ var backendStore = (function ($, Vue, superagent, Plite) {
 			'tests': '/run-tests',
 			'stream': '/stream',
 			'files': '/files',
-			'download': '/download',
-			'delete': '/delete'
+			'download': '/download'
 	},
 	icons = {
 			error: 'icon-cross_mark',
@@ -129,6 +128,23 @@ var backendStore = (function ($, Vue, superagent, Plite) {
 					console.log(response);
 					module.fileList = JSON.parse(response.text);
 					console.log(module.fileList);
+					promise.resolve();
+				}
+			});
+
+		return promise;
+	},
+	module.deleteFile = function (filename) {
+		var promise = Plite();
+
+		superagent
+			.del(urls.download + '/' + filename)
+			.end(function getResponse (error, response) {
+				if (error) {
+					promise.reject(error);
+				}
+				else {
+					console.log(response);
 					promise.resolve();
 				}
 			});
@@ -358,25 +374,33 @@ var app = (function ($, Vue, superagent) {
 			},
 			methods: {
 				deleteFile: function deleteFile (filename) {
-					console.log(filename);
+					var self = this;
+
 					if(this.confirmations[filename] === false) {
 						console.log(this.confirmations);
 						this.confirmations[filename] = true;
 						return;
 					}
+					else if (this.confirmations[filename] === true) {
+						state.store.deleteFile(filename)
+							.then(self.update());
+					}
+				},
+				update: function updateMe () {
+					var self = this;
+					state.store.getDownloadFiles()
+					.then(function () {
+						for (var i = state.store.fileList.length - 1; i >= 0; i--) {
+							self.confirmations.$add(state.store.fileList[i], false);
+						};
+					});
 				}
 			},
 			created: function created () {
 				'use strict';
 				var self = this;
 
-				state.store.getDownloadFiles()
-					.then(function () {
-						for (var i = state.store.fileList.length - 1; i >= 0; i--) {
-							self.confirmations.$add(state.store.fileList[i], false);
-						};
-					});
-				
+				self.update();
 			}
 		});
 
