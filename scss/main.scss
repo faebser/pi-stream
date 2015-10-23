@@ -252,7 +252,9 @@ input.button {
 		.buttons {
 			display: block;
 			//padding: 0.5em;
-			
+			.box {
+				text-align: center;
+			}
 			.gauge {
 				margin-right: 1em;
 			}

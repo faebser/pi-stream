@@ -17,7 +17,7 @@
       <div class="navBar">
         <a href="http://nonoradio.net" target="_blank">NoNoRadio.net</a>
         <a href="#">Documentation</a>
-        <a href="#">Recordings</a>
+        <!-- <a href="#">Recordings</a> -->
       </div>
       <div class="innerWrapper">
         <!-- <img src="logo.jpg" id="logo"> -->
@@ -32,7 +32,7 @@
           <div class="buttons">
 
             <div class="box">
-              <stream-button v-if="!state.store.hasErrorItems">
+              <stream-button>
               </stream-button>
               
               <test-button v-if="state.store.hasStatusItems">
@@ -107,7 +107,7 @@
       </div>
 
       <div id="streamButtonTemplate">
-        <a class="button good" v-class="disabled: !state.isFormInValid" v-on="click: runStream">
+        <a class="button good" v-class="disabled: !state.isFormInValid && state.store.hasErrorItems" v-on="click: runStream">
           <span v-class="spanClass" v-text="spanText"></span> {{ 'Stream'|uppercase }}
         </a>
       </div>

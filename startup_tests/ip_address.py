@@ -22,7 +22,7 @@ class IpPrivateTest(TestClass):
             ip = get_ip_address('eth0')
         except IOError:
             return TestStatus.Attention, \
-                   u'Network interface eth0 is not available', \
+                   u'The main network connection is not available. Please check the cable', \
                    u"No network\nconnection"
         if '192.168' in ip:
             return TestStatus.Good, 'My IP-Address in private range: {})'.format(ip), u''

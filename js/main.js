@@ -27,7 +27,7 @@ var backendStore = (function ($, Vue, superagent, Plite) {
 		return item.status !== 'good';
 	},
 	statusListErrorFilter = function (item) {
-		return item.status === 'error';
+		return item.class === 'error';
 	},
 	statusListMap = function (item) {
 		var icon = icons.error;
@@ -328,9 +328,9 @@ var app = (function ($, Vue, superagent) {
 			template: $('#streamButtonTemplate').html(),
 			methods: {
 				runStream: function () {
-					//if (this.state.isFormValid) { // TODO REMOVE THIS
+					if (this.state.isFormValid && state.store.hasErrorItems) { 
 						this.state.store.sendStreamFormData(this.state.formData);
-					//}
+					}
 
 					return;
 				}
@@ -377,13 +377,15 @@ var app = (function ($, Vue, superagent) {
 					var self = this;
 
 					if(this.confirmations[filename] === false) {
-						console.log(this.confirmations);
 						this.confirmations[filename] = true;
 						return;
 					}
 					else if (this.confirmations[filename] === true) {
 						state.store.deleteFile(filename)
-							.then(self.update());
+							.then(self.update())
+							.catch(function (error) {
+								console.log(error);
+							})
 					}
 				},
 				update: function updateMe () {
@@ -398,9 +400,7 @@ var app = (function ($, Vue, superagent) {
 			},
 			created: function created () {
 				'use strict';
-				var self = this;
-
-				self.update();
+				this.update();
 			}
 		});
 
@@ -413,7 +413,8 @@ var app = (function ($, Vue, superagent) {
 		var mainApp = new Vue({
 			el: '#app',
 			data: {
-				'state': state
+				'state': state,
+				'showDownloads': false,
 			},
 			components: {
 				'errorList': errorListComponent,
