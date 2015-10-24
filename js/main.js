@@ -360,6 +360,18 @@ var app = (function ($, Vue, superagent) {
 			}
 		});
 
+		var stopButtonComponent = Vue.extend({
+			data: {
+				state: state
+			},
+			methods: {
+				stopStream: function () {
+
+				}
+			},
+			template: $('#stopButtonTemplate').html()
+		});
+
 		var testButtonComponent = Vue.extend({
 			data: {
 				state: state
@@ -429,6 +441,7 @@ var app = (function ($, Vue, superagent) {
 		Vue.component('stream-form', streamFormComponent);
 		Vue.component('stream-button', streamButtonComponent);
 		Vue.component('test-button', testButtonComponent);
+		Vue.component('stop-button', testButtonComponent);
 		Vue.component('download-list', downloadComponent);
 
 		var mainApp = new Vue({
@@ -442,7 +455,8 @@ var app = (function ($, Vue, superagent) {
 				'streamForm': streamFormComponent,
 				'streamButton': streamButtonComponent,
 				'testButton': testButtonComponent,
-				'download': downloadComponent
+				'download': downloadComponent,
+				'stopButton': stopButtonComponent
 			},
 			methods: {
 				toggleDownloads: function (event) {

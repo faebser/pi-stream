@@ -43,6 +43,7 @@
               
               <test-button v-if="state.store.hasStatusItems && state.store.streamLink == ''">
               </test-button>
+
             </div>
 
           </div>
@@ -124,6 +125,12 @@
         </a>
       </div>
 
+      <div id="stopButtonTemplate">
+        <a class="button bad" v-class="class" v-on="click: stopStream">
+          <span v-class="spanClass" v-text="spanText"></span> {{ 'Stop Stream'|uppercase }}
+        </a>
+      </div>
+
       <div id="downloadTemplate">
         <div class="box header">
           <h1>Recordings</h1>
@@ -133,7 +140,7 @@
             <ul class="innerGradientBox downloads">
               <li v-repeat="state.store.fileList">
                 <span class="icon icon-cross_mark" v-class="red: confirmations[$value]" v-on="click: deleteFile($value)"></span>
-                  <a data-bla="confirmations[$value]" class="" href="download/{{ $value }}" target="_blank">{{ $value }}</a>
+                  <a data-bla="confirmations[$value]" href="download/{{ $value }}" target="_blank">{{ $value }}</a>
               </li>
             </ul>
           </div>
