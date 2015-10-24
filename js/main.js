@@ -89,7 +89,7 @@ var backendStore = (function ($, Vue, superagent, Plite) {
 					p.reject();
 				}
 				else {
-					p.resolve();
+					p.resolve(response);
 				}
 			});
 
