@@ -50,7 +50,7 @@ var backendStore = (function ($, Vue, superagent, Plite) {
 		module.getStreamStatus()
 			.then(
 				function success () {
-					window.setTimeout(updateStatusIntervall, timeout);
+					window.setTimeout(updateStatusIntervall, 2000);
 				}
 			)
 			.catch(
@@ -344,7 +344,13 @@ var app = (function ($, Vue, superagent) {
 				}
 			},
 			created: function () {
-				this.state.store.getStreamStatus();
+				this.state.store.getStreamStatus()
+					.then(function updateState (response) {
+						self.state.store.streamLink = response.body.link;
+					})
+					.catch(function error (error) {
+						console.error(error);
+					})
 				// console.log('the button raises to be clicked!');
 			}
 		});
