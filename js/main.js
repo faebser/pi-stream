@@ -333,7 +333,7 @@ var app = (function ($, Vue, superagent) {
 			methods: {
 				runStream: function () {
 					var self = this;
-					if (this.state.isFormValid && !state.store.hasErrorItems) { 
+					if (this.state.isValidForm && !state.store.hasErrorItems) { 
 						this.state.store.sendStreamFormData(this.state.formData)
 							.then(function updateState (response) {
 								self.state.store.streamLink = response.body.link;
