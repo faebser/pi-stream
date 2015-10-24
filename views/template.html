@@ -38,10 +38,10 @@
                   <p class="streamLinkBottom">{{{ state.store.streamLink }}}</p>
                 </div>
               </div>
-              <stream-button>
+              <stream-button v-if="state.store.streamLink == ''">
               </stream-button>
               
-              <test-button v-if="state.store.hasStatusItems">
+              <test-button v-if="state.store.hasStatusItems && state.store.streamLink == ''">
               </test-button>
             </div>
 
