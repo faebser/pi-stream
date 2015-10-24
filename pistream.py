@@ -224,7 +224,6 @@ def parse_card_info_string(info_string):
 def get_stream_status():
     global darkice_stderr_queue
     global darkice_stdout_queue
-    global lcd_display
 
     lines = ''
     try:
