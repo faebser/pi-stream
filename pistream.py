@@ -253,7 +253,7 @@ def get_stream_status():
         lcd_display.clear()
         lcd_display.message('I am streaming')
 
-    return {'link': 'Link to the stream: <a href="http://panel9.serverhostingcenter.com:2199/tunein/yfgmkhow-stream.pls">http://panel9.serverhostingcenter.com:2199/tunein/yfgmkhow-stream.pls</a>', 'errors': len(error_messages), 'messages': error_messages}
+    return {'link': '<a href="http://panel9.serverhostingcenter.com:2199/tunein/yfgmkhow-stream.pls">Link to the stream</a>', 'errors': len(error_messages), 'messages': error_messages}
 
 
 def parse_lines_for_error(line):

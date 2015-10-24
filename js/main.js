@@ -344,7 +344,8 @@ var app = (function ($, Vue, superagent) {
 				}
 			},
 			created: function () {
-				console.log('the button raises to be clicked!');
+				this.store.getStreamStatus();
+				// console.log('the button raises to be clicked!');
 			}
 		});
 
