@@ -311,7 +311,7 @@ var app = (function ($, Vue, superagent) {
 					_.forEach(state.formData, function validateForm (element) {
 						element.isValid = element.validator();
 					});
-					state.isFormValid = _.reduce(state.formData, function reduceForm (input, element) {
+					state.isValidForm = _.reduce(state.formData, function reduceForm (input, element) {
 						if(!element.isValid) {
 							return false;
 						} 

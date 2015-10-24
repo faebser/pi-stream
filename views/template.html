@@ -113,7 +113,7 @@
       </div>
 
       <div id="streamButtonTemplate">
-        <a class="button good" v-class="disabled: !state.isFormInValid && state.store.hasErrorItems" v-on="click: runStream">
+        <a class="button good" v-class="disabled: !state.isValidForm && !state.store.hasErrorItems" v-on="click: runStream">
           <span v-class="spanClass" v-text="spanText"></span> {{ 'Stream'|uppercase }}
         </a>
       </div>
