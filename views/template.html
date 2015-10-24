@@ -22,7 +22,7 @@
       <div class="innerWrapper">
         <!-- <img src="logo.jpg" id="logo"> -->
         <div class="top">
-          <stream-form v-if="!state.store.hasErrorItems">
+          <stream-form v-if="!state.store.hasErrorItems || state.store.streamLink">
           </stream-form>
         </div>
 

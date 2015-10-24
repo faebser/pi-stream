@@ -69,6 +69,9 @@ var backendStore = (function ($, Vue, superagent, Plite) {
 	module.init = function () {
 		//module.getStatus();
 	},
+	module.startUpdateStatusIntervall = function ()  {
+		updateStatusIntervall(2000);
+	}
 	module.getStatus = function () {
 		var self = this;
 		superagent.get(urls.status)
@@ -84,7 +87,7 @@ var backendStore = (function ($, Vue, superagent, Plite) {
 		superagent
 			.get(urls.stream)
 			.end(function (error, response) {
-				if(!Boolean(error) && response.body.errors !== 0) {
+				if(!Boolean(error) && response.body && response.body.errors !== 0) {
 					updateStatusList(response.body.messages);
 					p.reject();
 				}
@@ -348,10 +351,11 @@ var app = (function ($, Vue, superagent) {
 				this.state.store.getStreamStatus()
 					.then(function updateState (response) {
 						self.state.store.streamLink = response.body.link;
+						self.state.store.startUpdateStatusIntervall();
 					})
 					.catch(function error (error) {
 						console.error(error);
-					})
+					});
 				// console.log('the button raises to be clicked!');
 			}
 		});

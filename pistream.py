@@ -247,8 +247,6 @@ def get_stream_status():
     error_messages = filter(None, [parse_errors(error) for error in errors.split(linesep)])
     error_messages.extend(errors_from_lines)
 
-    print(darkice)
-
     if len(error_messages) == 0 and darkice is not None:
         # no errors
         lcd_display.reset()
