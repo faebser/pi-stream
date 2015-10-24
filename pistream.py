@@ -208,7 +208,6 @@ def start_stream():
     thread_error.daemon = True
     thread_error.start()
 
-    sleep(2)
     return get_stream_status()
 
 
