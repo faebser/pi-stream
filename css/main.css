@@ -1376,6 +1376,15 @@ input.button {
   color: #EFC82B;
 }
 
+/* line 318, ../scss/main.scss */
+#streamLink p {
+  line-height: 1.7;
+}
+/* line 324, ../scss/main.scss */
+#streamLink .streamLinkBottom {
+  padding: 0 0 1.7rem 0;
+}
+
 /* line 2, ../scss/_downloads.scss */
 .downloads li {
   padding: 0.25rem 0;

@@ -32,6 +32,12 @@
           <div class="buttons">
 
             <div class="box">
+               <div id="streamLink">
+                <div v-if="state.store.streamLink">
+                  <p class="streamLinkTop">I am streaming</p>
+                  <p class="streamLinkBottom">{{{ state.store.streamLink }}}</p>
+                </div>
+              </div>
               <stream-button>
               </stream-button>
               

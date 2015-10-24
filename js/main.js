@@ -20,7 +20,8 @@ var backendStore = (function ($, Vue, superagent, Plite) {
 		statusList: [],
 		fileList: [],
 		hasStatusItems : false,
-		hasErrorItems: false
+		hasErrorItems: false,
+		streamLink: ''
 	};
 	// private methods
 	var statusListFilter = function (item) {
@@ -55,6 +56,7 @@ var backendStore = (function ($, Vue, superagent, Plite) {
 			.catch(
 				function error () {
 					console.error('error in darkice');
+					module.streamLink = '';
 				}
 			);
 	},
@@ -107,10 +109,8 @@ var backendStore = (function ($, Vue, superagent, Plite) {
 				else {
 					promise.resolve(response);
 				}
-				console.log(error);
-				console.log(response);
 				// update status
-				updateStatusIntervall(10000);
+				updateStatusIntervall(1000);
 			});
 
 		return promise;
@@ -213,6 +213,7 @@ var stateFactory = (function ($, backendStore) {
 		'isStreaming': false,
 		'isValidForm': false,
 		'errorList': [],
+		'streamLink': '',
 		'formData': {
 			name: {
 				value: '',
@@ -329,7 +330,13 @@ var app = (function ($, Vue, superagent) {
 			methods: {
 				runStream: function () {
 					if (this.state.isFormValid && !state.store.hasErrorItems) { 
-						this.state.store.sendStreamFormData(this.state.formData);
+						this.state.store.sendStreamFormData(this.state.formData)
+							.then(function updateState (response) {
+								this.state.store.streamLink = response.link;
+							})
+							.catch(function error (error) {
+								console.error(error);
+							});
 					}
 
 					return;

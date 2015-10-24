@@ -158,11 +158,6 @@ def start_stream():
     alsacap = subprocess.Popen('alsacap -R', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     output, error = alsacap.communicate()
 
-    print "output:"
-    print output
-    print "error:"
-    print error
-
     found_usb = False
     channels = None
     sampling_rate = None
@@ -229,6 +224,7 @@ def parse_card_info_string(info_string):
 def get_stream_status():
     global darkice_stderr_queue
     global darkice_stdout_queue
+    global lcd_display
 
     lines = ''
     try:
@@ -252,7 +248,13 @@ def get_stream_status():
     error_messages = filter(None, [parse_errors(error) for error in errors.split(linesep)])
     error_messages.extend(errors_from_lines)
 
-    return {'link': 'http://panel9.serverhostingcenter.com:2199/tunein/yfgmkhow-stream.pls', 'errors': len(error_messages), 'messages': error_messages}
+    if len(error_messages) == 0:
+        # no errors
+        lcd_display.reset_queue()
+        lcd_display.clear()
+        lcd_display.message('I am streaming')
+
+    return {'link': 'Link to the stream: <a href="http://panel9.serverhostingcenter.com:2199/tunein/yfgmkhow-stream.pls">http://panel9.serverhostingcenter.com:2199/tunein/yfgmkhow-stream.pls</a>', 'errors': len(error_messages), 'messages': error_messages}
 
 
 def parse_lines_for_error(line):
