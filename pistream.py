@@ -249,13 +249,14 @@ def get_stream_status():
 
     print(darkice)
 
-    if len(error_messages) == 0:
+    if len(error_messages) == 0 and darkice is not None:
         # no errors
         lcd_display.reset()
         lcd_display.clear()
         lcd_display.message('I am streaming')
-
-    return {'link': '<a href="http://panel9.serverhostingcenter.com:2199/tunein/yfgmkhow-stream.pls">Link to the stream</a>', 'errors': len(error_messages), 'messages': error_messages}
+        return {'link': '<a href="http://panel9.serverhostingcenter.com:2199/tunein/yfgmkhow-stream.pls">Link to the stream</a>', 'errors': len(error_messages), 'messages': error_messages}
+    else:
+        abort(500)
 
 
 def parse_lines_for_error(line):
