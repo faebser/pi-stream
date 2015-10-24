@@ -387,6 +387,7 @@ var app = (function ($, Vue, superagent) {
 								console.log(error);
 							})
 					}
+					// test comment
 				},
 				update: function updateMe () {
 					var self = this;
