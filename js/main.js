@@ -328,7 +328,7 @@ var app = (function ($, Vue, superagent) {
 			template: $('#streamButtonTemplate').html(),
 			methods: {
 				runStream: function () {
-					if (this.state.isFormValid && state.store.hasErrorItems) { 
+					if (this.state.isFormValid && !state.store.hasErrorItems) { 
 						this.state.store.sendStreamFormData(this.state.formData);
 					}
 
