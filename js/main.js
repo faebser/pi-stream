@@ -344,6 +344,7 @@ var app = (function ($, Vue, superagent) {
 				}
 			},
 			created: function () {
+				var self = this;
 				this.state.store.getStreamStatus()
 					.then(function updateState (response) {
 						self.state.store.streamLink = response.body.link;
