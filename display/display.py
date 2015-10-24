@@ -50,7 +50,7 @@ class LcdDisplay(object):
     def put(self, message, message_type=(0.1, 0.1, 1)):
         self.lcd_queue.put({'type': message_type, 'message': message})
 
-    def reset_queue(self):
+    def reset(self):
         self.reset_queue.put('reset')
 
     def set_color(self, r, g, b):

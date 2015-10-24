@@ -249,7 +249,7 @@ def get_stream_status():
 
     if len(error_messages) == 0:
         # no errors
-        lcd_display.reset_queue()
+        lcd_display.reset()
         lcd_display.clear()
         lcd_display.message('I am streaming')
 
