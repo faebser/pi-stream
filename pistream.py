@@ -101,7 +101,7 @@ def init():
     try:
         ip_address = get_ip_address('eth0')
         lcd_display.put(u"Reach me at\n{}".format(ip_address), lcd_display.GOOD)
-    except Exception, e:
+    except Exception as e:
         pass # dont do anything, there will be an error in the queue anyway
     for item in status:
         if item['result'] is TestStatus.Error:
