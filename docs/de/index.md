@@ -1,8 +1,8 @@
 # Beschreibung
 
 Diese Projekt versucht aus dem Raspberry Pi mit handelsüblichen Komponenten,
-angepasstem Betriebssystem und Software einen
-einfach zu bedienenden Stream- und Aufnahmestation zu machen.
+angepasster Software eine
+einfach zu bedienende Stream- und Aufnahmestation zu machen.
 
 # Sponsor
 
@@ -52,7 +52,7 @@ in das Gehäuse schieben und anschliessen.
 
 ![Raspi fertig](../images/IMG_20150911_181422.jpg)
 
-# zur [Inbetriebnahme](https://github.com/faebser/pi-stream/blob/master/docs/manual.md)
+# zur [Inbetriebnahme](https://github.com/faebser/pi-stream/blob/master/docs/de/manual.md)
 
 
 

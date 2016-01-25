@@ -1,58 +1,53 @@
-# Beschreibung
+# Description
 
-Diese Projekt versucht aus dem Raspberry Pi mit handelsüblichen Komponenten,
-angepasstem Betriebssystem und Software einen
-einfach zu bedienenden Stream- und Aufnahmestation zu machen.
+The am of this project is to turn the Raspberry Pi into a simple to use stream and recording station using off the shelf compontents and custom software.
 
 # Sponsor
 
 (Sponsor Info hinzfügen)
 
-# Zusammenbau
+# Assembly
 
-Wir empfehlen die Nutzung eines LCD-Displays, da dies für die Ausgabe der aktuellen IP-Adresse genutzt wird. Die IP-Adresse des Rechners kann jedoch auch über andere Wege ermittelt werden.
+We recommend adding a LCD-display as it used to show status information and most importantly the current IP-address of the machine. It is certainly also possible to get hold of the IP-address in other, slighty more complicated, ways.
 
-Für unsere Version haben wir ein Gehäuse gebaut um den Rechner und die Komponenten zu schützen.
+We built an enclosure to shelter the computer, the display and the cables.
 
 ![raspi fertig](../images/IMG_20150911_181422.jpg)
 
-## LCD-Display
+## LCD-display
 
-Wir haben [dieses 16x2 LCD Kit von adafruit.com](http://www.adafruit.com/products/1110) verbaut.
+We use [this 16x2 LCD kit from adafruit.com](http://www.adafruit.com/products/1110).
 
-## Gehäuse
+## Enclosure
 
-* Abstandshalter einbauen
+* Install spacer
     
-Ich habe ein Stück Holz mit der ungefähren Grösse des Rechners augeschnitten und in das Gehäuse geklebt.
+I glued a piece of wood with the approximate size of the Raspberry to the bottom of the enclosure.
 
 ![Raspi Gehaese Spacer](../images/IMG_20150911_155047.jpg) 
 ![Raspi kleben](../images/IMG_20150911_155513.jpg)
 
 
-* Löcher in Behälter schneiden
+* Adding holes
     
-Die Grösse der Anschlüsse abmessen, diese auf dem Gehäuse markieren
-und auschneiden.
+Cut holes in the side of the enclosure so the connectors fit. 
 
 ![Raspi Löcher schneiden](../images/IMG_20150911_170557.jpg)
     
-* Abdeckungen für Löcher zuschneiden
+* Cover for the connectors
 
-Um den Rechner und das Display zu schützen, Abdeckungen für die Kabel
-zuschneiden und sie aussen auf das Gehauses kleben.
+To protect the board and the display cut out covers and glue them onto the enclosure.
 
 ![Raspi lasercutter](../images/IMG_20150911_173845.jpg)
 ![Raspi kleben abdeckungen](../images/IMG_20150911_180205.jpg)
 
-* Rechner befestigen
+* Attach computer
     
-Den Rechner auf dem Abstandhalter befestigen. Die Kabel von aussen
-in das Gehäuse schieben und anschliessen.
+Screw the board onto the spacer. Connect the cables from the outside.
 
 ![Raspi fertig](../images/IMG_20150911_181422.jpg)
 
-# zur [Inbetriebnahme](https://github.com/faebser/pi-stream/blob/master/docs/manual.md)
+#[How to start](https://github.com/faebser/pi-stream/blob/master/docs/en/manual.md)
 
 
 
