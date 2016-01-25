@@ -12,6 +12,10 @@
 
 (please add sponsor info here)
 
+## Dcos
+
+Docs are currently availabe in [english](https://github.com/faebser/pi-stream/blob/master/docs/en/index.md) and [deutsch](https://github.com/faebser/pi-stream/blob/master/docs/de/index.md.
+
 ## Setup
 
 *Note*: We will provide premade raspian disk images in the future.
