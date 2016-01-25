@@ -47,7 +47,4 @@ Screw the board onto the spacer. Connect the cables from the outside.
 
 ![Raspi fertig](../images/IMG_20150911_181422.jpg)
 
-#[How to start](https://github.com/faebser/pi-stream/blob/master/docs/en/manual.md)
-
-
-
+#[How to run it](https://github.com/faebser/pi-stream/blob/master/docs/en/manual.md)

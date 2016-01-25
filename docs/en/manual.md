@@ -1,47 +1,46 @@
-# Inbetriebnahme
+# How to run it
 
-Vor Inbetriebnahme alle Kabel ausstecken.
+First unplug all cables.
 
 ![Raspi nicht eingesteckt](../images/manual/IMG_20151022_230405.jpg)
 
-* Als erste das USB Kabel mit der USB-Aufnahmegerät und der Soundquelle verbinden.
+* Connect the USB soundcard to the source.
 
 ![usbsound](../images/manual/IMG_20151022_230938.jpg)
 
-* Dann das Netzwerkkabel mit dem Router verbinden
+* Connect the machine to your router and the internet
 
 ![rj45](../images/manual/IMG_20151022_231530.jpg)
 
-* Den Rechner an den Strom anschliessen
+* Connect the computer to the power
 
 ![strom](../images/manual/IMG_20151022_232157.jpg)
 
-* Der Rechner startet und die beiden Status-LED an der Seite des Rechners beginnen zu blinken.
+* Now the board will boot up. The two status LEDs begin to blink.
 
 ![LED](../images/manual/IMG_20151022_232553.jpg)
 
-* Nach ungefähr einer Minute wird das Streaming-Programm gestartet.
+* After approximately one minute the streaming software starts
 
 ![gif](../images/manual/startup.gif)
 
-* Die Software benötigt einen kurzen Augenblick um alle Status-Tests durchzuführen.
+* The software needs a few moments to run some status tests.
 
 ![tests](../images/manual/IMG_20151023_000826.jpg)
 
-* Falls alle Tests ohne Probleme ausgeführt wurden, erscheint die Meldung mit der IP-Adresse des Rechners auf dem LCD-Display.
+* If all tests were successfull the LCD display shows the current IP address.
 
 ![ip](../images/manual/IMG_20151023_001753.jpg)
 
-* Anschliessend zeigt das LCD die Status-Meldungen der Software an. Es gibt drei verschiedene Arten von Meldungen:
-    * **grüner Hintergrundfarbe**: Alles gut (z.B. IP-Adresse, Streaming)
-    * **gelber Hintergrundfarbe**: Achtung, evtl ein Problem (z.B. Speicherplatz wird knapp, Soundkarte nicht erkannt)
-    * **roter Hintergrundfarbe**: kritischer Fehler (z.B. keine Netzwerkverbindung, keine Verbindung zum Server)
+* After the announcement of the IP addres the display is used to show some status information . There are three different kinds of status messages:
+    * **green background color**: Everything is good (e.g. IP address, streaming status)
+    * **yellow background color**: Attention, there seems to be a problem (e.g. scarce free memory, not soundcard identfied)
+    * **red background color**: critical error (e.g. not network connection, no connection to the stream server)
 
 
 ![ip](../images/manual/IMG_20151023_001753.jpg)
 ![tests](../images/manual/IMG_20151023_000826.jpg)
 ![error](../images/manual/IMG_20151023_002215.jpg)
 
-# Zur [Benutzeroberfläche](https://github.com/faebser/pi-stream/blob/master/docs/software.md)
-
+#[The user interface](https://github.com/faebser/pi-stream/blob/master/docs/en/software.md)
 

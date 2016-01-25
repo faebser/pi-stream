@@ -33,7 +33,7 @@ Vor Inbetriebnahme alle Kabel ausstecken.
 ![ip](../images/manual/IMG_20151023_001753.jpg)
 
 * Anschliessend zeigt das LCD die Status-Meldungen der Software an. Es gibt drei verschiedene Arten von Meldungen:
-    * **grüner Hintergrundfarbe**: Alles gut (z.B. IP-Adresse, Streaming)
+    * **grüner Hintergrundfarbe**: Alles gut (z.B. IP-Adresse, Streaming Status)
     * **gelber Hintergrundfarbe**: Achtung, evtl ein Problem (z.B. Speicherplatz wird knapp, Soundkarte nicht erkannt)
     * **roter Hintergrundfarbe**: kritischer Fehler (z.B. keine Netzwerkverbindung, keine Verbindung zum Server)
 
@@ -42,6 +42,6 @@ Vor Inbetriebnahme alle Kabel ausstecken.
 ![tests](../images/manual/IMG_20151023_000826.jpg)
 ![error](../images/manual/IMG_20151023_002215.jpg)
 
-# Zur [Benutzeroberfläche](https://github.com/faebser/pi-stream/blob/master/docs/software.md)
+# Zur [Benutzeroberfläche](https://github.com/faebser/pi-stream/blob/master/docs/en/software.md)
 
 
