@@ -14,7 +14,7 @@
 
 ## Dcos
 
-Docs are currently availabe in [english](https://github.com/faebser/pi-stream/blob/master/docs/en/index.md) and [deutsch](https://github.com/faebser/pi-stream/blob/master/docs/de/index.md.
+Docs are currently availabe in [english](https://github.com/faebser/pi-stream/blob/master/docs/en/index.md) and [deutsch](https://github.com/faebser/pi-stream/blob/master/docs/de/index.md).
 
 ## Setup
 
@@ -91,6 +91,13 @@ Now we are ready to build and install the new Darkice package:
 Tada, now Darkice with MP3 spport should be installed. To test please run:
     
     $ darkice
+
+## Installing alsacap
+
+* get the source from here: http://www.volkerschatz.com/noise/alsa.html (http://www.volkerschatz.com/noise/alsacap.tgz)
+* ```mkdir alsacap ; cd alsacap```
+* ```sudo make install```
+* test with ```alsacap```
 
 ## Running 
 
