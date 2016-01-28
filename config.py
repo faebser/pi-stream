@@ -205,7 +205,7 @@ def write_to_temp_file():
 
 
 def write_to_file(fp, general_section, audio_section, servers):
-    temp_parser = configparser.ConfigParser()
+    temp_parser = ConfigParser()
     temp_parser.optionxform = str
     for prop in general_section.property_tuple:
         add_value_from_prop(temp_parser, prop, general_section.section_name)
@@ -219,7 +219,7 @@ def write_to_file(fp, general_section, audio_section, servers):
 
 
 def init_config(config_file):
-    parser = configparser.ConfigParser()
+    parser = ConfigParser()
     icecast = list()
     general = None
     audio = None  # renamed to audio instead of input as it would shadow builtin input
