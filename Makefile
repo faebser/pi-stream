@@ -1,6 +1,6 @@
 
 .PHONY: run
-run: activate update pistream.py
+run: update pistream.py
 	python pistream.py
 
 
@@ -11,9 +11,7 @@ update:
 
 env:
 	virtualenv env
-	pip install configparser==3.3.0r2
-	pip install enum34==1.0.4
-
-.PHONE: activate
-activate: env
-	source env/bin/activate
+	
+install: env
+	env/bin/pip install configparser==3.3.0r2
+	env/bin/pip install enum34==1.0.4
