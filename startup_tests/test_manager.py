@@ -1,7 +1,6 @@
-__author__ = 'faebser'
-
 from enum import Enum
-import bottle
+
+__author__ = 'faebser'
 
 
 class TestStatus(Enum):

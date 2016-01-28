@@ -1,4 +1,4 @@
-from ConfigParser import NoOptionError, NoSectionError, ConfigParser
+from configparser import NoOptionError, NoSectionError, ConfigParser
 import tempfile
 from startup_tests.test_manager import TestStatus
 import json
