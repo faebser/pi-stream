@@ -109,5 +109,5 @@ Tada, now Darkice with MP3 spport should be installed. To test please run:
 * ssh into your raspberry
 * clone this repository
 * make sure that bottle.py and pistream.py are executable
-* ```python pystream.py``` to start the server
-* navigate your browser to the ip of your raspi, the default port is 8080
+* ```sudo make run``` to start the server
+* IP address will be on the LCD display or printed into stdout.
