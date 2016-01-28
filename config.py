@@ -1,7 +1,4 @@
-__author__ = 'faebser'
-
-import configparser
-from configparser import NoOptionError, NoSectionError, ConfigParser
+from ConfigParser import NoOptionError, NoSectionError, ConfigParser
 import tempfile
 from startup_tests.test_manager import TestStatus
 import json
