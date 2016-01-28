@@ -99,6 +99,11 @@ Tada, now Darkice with MP3 spport should be installed. To test please run:
 * ```sudo make install```
 * test with ```alsacap```
 
+## Installing kernel I2C support
+
+    sudo apt-get install python-smbus
+    sudo apt-get install i2c-tools
+
 ## Running 
 
 * ssh into your raspberry
