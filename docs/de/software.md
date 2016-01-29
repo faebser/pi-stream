@@ -1,5 +1,3 @@
-asdfasdf 
-
 # Benutzeroberfläche
 
 Um die Benutzeroberfläche zu erreichen, einfach die IP-Adresse des Rechners in den Browser eintippen.
