@@ -73,6 +73,10 @@ def get_ip_address(ifname):
 def init():
     global status, app_config, darkice_config
 
+    print("super important")
+    print("auto update is working")
+    print("yuheee")
+
     lcd_display.info("...............\n...............")
     lcd_display.info("server\nstarting up")
     status = []
