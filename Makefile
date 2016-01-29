@@ -18,5 +18,8 @@ env/lib/python2.7/site-packages/enum: env
 env/lib/python2.7/site-packages/configparser.py: env
 	env/bin/pip install configparser==3.3.0r2
 
+env/lib/python2.7/site-packages/RPi: env
+	env/bin/pip install RPi.GPIO
+
 env:
 	virtualenv env
