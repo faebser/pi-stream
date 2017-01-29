@@ -8,11 +8,7 @@
 * [Compass CSS Authoring Framework](http://compass-style.org/)
 * [alsacap](http://www.volkerschatz.com/noise/alsa.html)
 
-## Sponsor
-
-(please add sponsor info here)
-
-## Dcos
+## Docs
 
 Docs are currently availabe in [english](https://github.com/faebser/pi-stream/blob/master/docs/en/index.md) and [deutsch](https://github.com/faebser/pi-stream/blob/master/docs/de/index.md).
 
